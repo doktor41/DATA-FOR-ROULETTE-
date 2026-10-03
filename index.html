@@ -67,6 +67,7 @@ nav button i{display:block;font-style:normal;font-size:20px}nav .on{color:var(--
 textarea{width:100%;height:84px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;resize:vertical}
 .hl{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.hi{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:2px}
 .al{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--bd);font-size:14px}.bg2{padding:2px 8px;border-radius:8px;color:#fff;font-weight:700;font-size:12px;flex:none}.bg2.y{background:var(--y)}.bg2.o{background:var(--o)}.bg2.x{background:var(--x)}.more{width:100%;margin-top:6px;border:1px solid var(--bd);background:var(--bg);border-radius:9px;height:34px}
+.hit{box-shadow:0 3px 0 0 #f5c542}.b.hit{box-shadow:inset 0 0 0 1px #4a5a52,0 3px 0 0 #f5c542}.strip{padding-bottom:3px}.hi .ball{margin-bottom:3px}
 </style></head><body>
 <main id="v"></main><nav id="nav"></nav><div id="toast"></div><div id="ov"></div>
 <script>
@@ -145,17 +146,21 @@ function rose(){
 function panel(){const L=S.length;let rows='';
  for(let n=0;n<=36;n++)rows+=`<button class="nb ${col(n)}" onclick=add(${n})>${n}</button>`;
  return `<div id=pnl><div class=pa><button onclick=undo() ${L?'':'disabled'}>↶ Geri Al</button><button onclick="hist=1;draw()">Geçmiş</button><button class="del ${clr?'sure':''}" onclick=clearAll()>${clr?'Emin misin?':'Temizle'}</button></div><div class=pg>${rows}</div></div>`}
+function hitInfo(){const L=S.length;if(!L)return{t:null,hit:new Set()};const X=S[L-1],t=top3(S,X,N);if(!t)return{t:null,hit:new Set()};
+ const cov=new Set(t.t.flatMap(o=>[...R[N][o.c]])),hit=new Set();
+ for(let j=1;j<L;j++)if(S[j-1]===X&&cov.has(S[j]))hit.add(j);
+ return{t,hit}}
 function home(){
- const L=S.length,X=L?S[L-1]:null;
+ const L=S.length,X=L?S[L-1]:null,HI=hitInfo().hit;
  let h=`<div class=top><b>Rulet Takip</b><span class="mu sm">${L} el</span><div class=seg><button class="${N==2?'on':''}" onclick="setN(2)">2'li</button><button class="${N==3?'on':''}" onclick="setN(3)">3'lü</button></div></div>`;
- h+=`<div class="card last">${X===null?'<span class=mu>Henüz el yok. Aşağıdan sayıya dokun.</span>':`<i class="ball ${col(X)}">${X}</i><div class=strip>${S.slice(-10).map(n=>`<span class="chip ${col(n)}">${n}</span>`).join('')}</div>`}</div>`;
+ h+=`<div class="card last">${X===null?'<span class=mu>Henüz el yok. Aşağıdan sayıya dokun.</span>':`<i class="ball ${col(X)}${HI.has(L-1)?' hit':''}">${X}</i><div class=strip>${S.slice(-10).map((n,k)=>`<span class="chip ${col(n)}${HI.has(Math.max(0,L-10)+k)?' hit':''}">${n}</span>`).join('')}</div>`}</div>`;
  let c1;
  if(X===null)c1='<p class=mu>Sayı girince burada görünür.</p>';
  else{const t=top3(S,X,N);
   if(!t)c1=`<p class=mu>${X} sayısından sonra henüz veri yok.</p>`;
   else{
    if(openC!==null&&!t.t.some(o=>o.c===openC))openC=null;
-   c1=`<div class="mu sm">${X} sonrası ${t.n} örnek${t.n<3?' · veri az':''}</div><div class=cens>${t.t.map((o,i)=>`<button class="cen ${openC===o.c?'on':''}" onclick="openC=${openC===o.c?'null':o.c};draw()"><b class=rk>${i+1}</b><i class="ball sm ${col(o.c)}">${o.c}</i><span class="mu sm">${o.sc}/${t.n}</span></button>`).join('')}</div>${openC!==null?`<div class=reg><b>${openC} bölgesi:</b> ${regA(openC,N).join('-')}</div>`:''}`}}
+   c1=`<div class="mu sm">${X} sonrası ${t.n} örnek · 3 merkez <b>${HI.size}/${t.n}</b> tutuyor (%${Math.round(HI.size/t.n*100)})${t.n<3?' · veri az':''}</div><div class=cens>${t.t.map((o,i)=>`<button class="cen ${openC===o.c?'on':''}" onclick="openC=${openC===o.c?'null':o.c};draw()"><b class=rk>${i+1}</b><i class="ball sm ${col(o.c)}">${o.c}</i><span class="mu sm">${o.sc}/${t.n}</span></button>`).join('')}</div>${openC!==null?`<div class=reg><b>${openC} bölgesi:</b> ${regA(openC,N).join('-')}</div>`:''}`}}
  h+=`<div class=card><h3>Sonraki Bölgeler</h3>${c1}</div>`;
  h+=alerts();
  const ev=[];for(let i=Math.max(1,L-10);i<L;i++)ev.push(evalAt(i));
@@ -164,8 +169,9 @@ function home(){
  h+=`<div class=card><h3>Son 10 El Doğrulama</h3><div class=vs>${'<div class=v>·</div>'.repeat(pad)}${ev.map(e=>!e?'<div class=v>–</div>':e.hit?'<div class="v h">✓</div>':'<div class="v m">✗</div>').join('')}</div>${ok.length?`<div class=sm>Tutan: <b>${hits}/${ok.length}</b> (%${Math.round(hits/ok.length*100)}) · rastgele ≈ %${Math.round(base)}</div>`:'<div class="mu sm">Doğrulama için en az 2 el gerekir.</div>'}</div>`;
  return h+rose()+'<div style="height:270px"></div>'+panel()}
 function overlay(){
+ const hs=hitInfo().hit;
  const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
- return `<div class=ovc><div class=top><b>Geçmiş (${S.length})</b><div class=seg><button onclick="hist=0;draw()">Kapat</button></div></div><div class=card><h3>Kopyala / Aktar</h3><div class=acts2><button onclick=copyAll() ${S.length?'':'disabled'}>Panoya Kopyala</button><button onclick=pasteIn()>Panodan Al</button></div><textarea id=ta oninput="pt=this.value" placeholder="Sayıları yapıştır (virgül, boşluk veya alt alta; eskiden yeniye)">${esc(pt)}</textarea><div class=acts2><button onclick=doImport(0)>Sona Ekle</button><button class=dg onclick=doImport(1)>Üzerine Yaz</button></div></div><div class=card><h3>Sayılar (yeniden eskiye, dokun = sil)</h3><div class=hl>${S.map((n,i)=>`<button class=hi onclick="delAt(${i})"><i class="ball sm ${col(n)}">${n}</i><span class="mu sm">${i+1}</span></button>`).reverse().join('')}</div></div></div>`}
+ return `<div class=ovc><div class=top><b>Geçmiş (${S.length})</b><div class=seg><button onclick="hist=0;draw()">Kapat</button></div></div><div class=card><h3>Kopyala / Aktar</h3><div class=acts2><button onclick=copyAll() ${S.length?'':'disabled'}>Panoya Kopyala</button><button onclick=pasteIn()>Panodan Al</button></div><textarea id=ta oninput="pt=this.value" placeholder="Sayıları yapıştır (virgül, boşluk veya alt alta; eskiden yeniye)">${esc(pt)}</textarea><div class=acts2><button onclick=doImport(0)>Sona Ekle</button><button class=dg onclick=doImport(1)>Üzerine Yaz</button></div></div><div class=card><h3>Sayılar (yeniden eskiye, dokun = sil)</h3><div class=hl>${S.map((n,i)=>`<button class=hi onclick="delAt(${i})"><i class="ball sm ${col(n)}${hs.has(i)?' hit':''}">${n}</i><span class="mu sm">${i+1}</span></button>`).reverse().join('')}</div></div></div>`}
 function fbCopy(t,ok){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){toast('Kopyalanamadı')}a.remove()}
 function copyAll(){const t=S.join(','),ok=()=>toast('Kopyalandı: '+S.length+' sayı');
  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,()=>fbCopy(t,ok));else fbCopy(t,ok)}
