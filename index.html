@@ -42,7 +42,7 @@ select{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-
 .num{height:50px;border:0;border-radius:10px;color:#fff;font-size:19px;font-weight:600}
 .num:active{transform:scale(.94);filter:brightness(1.25)}
 .num.z{grid-column:1/-1;height:46px}
-.gb{margin:8px 0}.gh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.kg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kt{background:var(--n);border-radius:10px;padding:8px}.kt b{font-size:15px}.kg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gb{margin:8px 0}.gh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .gh span{font-size:12px}
 .trk{height:26px;background:var(--n);border-radius:8px;overflow:hidden;margin-top:4px}
 .fill{height:100%;display:flex;align-items:center;padding-left:10px;font-weight:700;color:#fff;min-width:34px;border-radius:8px}
@@ -740,8 +740,7 @@ function home(){
    const cv2=new Set(tb.t.flatMap(o=>[...R[N][o.c]])),nowOut=tb.nx.filter(([v])=>!cv2.has(v)).length,com=ev2.filter(a=>!a[2].hit&&!cv2.has(a[0])).map(a=>[a[0],a[1]]),c5=com.slice(-5).reverse();
    h+=`<div class="card sub"><h3>Kararlı bozanlar <span class="mu sm">(${X} sonrası ${com.length}/${ev2.length} ortak)</span></h3>${c5.length?`<div class=hl style="grid-template-columns:repeat(5,1fr)">${c5.map(([v,ix])=>`<div class=hi><i class="ball sm ${col(v)}">${v}</i><span class="mu sm">${ix+1}. el</span></div>`).join('')}</div>`:'<div class="mu sm">Ortak bozan yok.</div>'}<div class="mu sm" style="margin-top:4px">Hem geldiği andaki bölgelerin hem şimdiki bölgelerin dışında kalanlar. Şimdiki bölgelere göre ${nowOut}/${tb.n}, geldiği andakilere göre ${ms.length}/${ev2.length} dışarıda.</div></div>`}}
  h+=btCard();
- h+=bkMore();
- h+=alerts();
+  h+=alerts();
  return h}
 
 function overlay(){
@@ -845,7 +844,7 @@ function bkTop(){
  const st=bkState(),lim=BK.lim,stop=lim>0&&st.tot<=-lim,c=z.c,rc=bkRec(z,st);
  if(stop)return `<div class=card style="border:2px solid var(--x)"><b style="color:var(--x);font-size:20px">DUR · zarar limiti doldu</b><div class="mu sm">${bkFm(st.tot)} / −${lim}</div></div>`;
  let h=`<div class=card style="${rc?'border:2px solid var(--ac);':''}">`;
- if(rc){h+=`<div style="font-size:22px;font-weight:700;color:var(--ac)">Bu el ${rc.amt} birim koy</div><div class="mu sm">${bkTxt(rc.parts)} · açık seri ${st.k} bahis · seri neti ${bkFm(st.cy)} · hedef +${st.T}</div>`;
+ if(rc){h+=`<div style="font-size:22px;font-weight:700;color:var(--ac)">Bu el ${rc.amt} birim koy</div><div class="mu sm">${bkTxt(rc.parts)} · toplam net ${bkFm(st.tot)} · açık seri ${st.k} bahis · seri neti ${bkFm(st.cy)} · hedef +${st.T}</div>`;
   if(lim>0&&st.tot-rc.amt*c<=-lim)h+=`<div style="color:var(--x);font-size:13px"><b>Bu tutar zarar limitini aşar.</b></div>`}
  else h+=`<div class="mu sm">Açık seri yok. İlk birimi sen seç. Seçmezsen bu el bahis sayılmaz.</div>`;
  h+=`<div class=cens style="flex-wrap:wrap">${BK.chips.map(u=>`<button class=cen style="min-width:52px" onclick="bkAdd(${u})"><b>${u}</b></button>`).join('')}<button class=cen style="min-width:64px" onclick="bkClear()">Temizle</button></div>`;
@@ -853,22 +852,77 @@ function bkTop(){
  h+=BK.pend?`<div style="margin-top:8px;font-size:13px">Seçili <b>${BK.pend}</b> birim × ${c} sayı = <b>${BK.pend*c}</b> · tutarsa <b style="color:var(--ok)">${bkFm((36-c)*BK.pend)}</b> · tutmazsa <b style="color:var(--x)">${bkFm(-c*BK.pend)}</b></div>`:`<div class="mu sm" style="margin-top:8px">Seçili yok, bu el bahis sayılmaz.</div>`;
  h+=`<div class="mu sm" style="margin-top:6px;text-align:right"><a onclick="bkChipsSet()" style="text-decoration:underline">Birimleri ayarla (${BK.chips.join('-')})</a></div></div>`;
  return h}
-function bkMore(){
- const z=bkZone(),st=bkState(),lim=BK.lim,c=z?z.c:21,base=BK.chips.includes(BK.base)?BK.base:BK.chips[0],rows=bkTable(base,c),lg=BK.log.slice(-10).reverse();
- let h=`<details class=card ${bkOpen?'open':''} ontoggle="bkOpen=this.open"><summary><b>Kazan tablosu ve kayıt</b> <span class="mu sm">· net ${bkFm(st.tot)} · ${st.n} bahis</span></summary>`;
- h+=`<div style="font-size:22px;font-weight:700;margin-top:8px;color:${bkCl(st.tot)}">${bkFm(st.tot)} <span class="mu sm">birim</span></div>
- <div class="mu sm">Tutan ${st.hits}${st.n?` (%${Math.round(st.hits/st.n*100)})`:''} · kapanan seri ${st.closed} · en derin düşüş −${st.mdd} · yatırılan toplam ${st.stk}</div>
- <div class="mu sm" style="margin-top:8px">Zarar limiti (birim)</div><div class=cens style="flex-wrap:wrap">${KL.map(v=>`<button class="cen ${lim===v?'on':''}" style="min-width:52px" onclick="bkLim(${v})">${v||'Kapalı'}</button>`).join('')}</div>
- <div class="mu sm" style="margin-top:12px"><b>Tablo</b> · ilk birim (${c} sayı, hedef +${(36-c)*base})</div><div class=cens style="flex-wrap:wrap">${BK.chips.map(u=>`<button class="cen ${base===u?'on':''}" style="min-width:52px" onclick="bkBase(${u})">${u}</button>`).join('')}</div>
- <div style="overflow-x:auto;margin-top:8px"><table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right"><tr class=mu><th style="text-align:left">El</th><th>Birim</th><th>Yatırım</th><th>Tutarsa net</th><th>Gelme</th></tr>${rows.map(r=>`<tr style="border-top:1px solid var(--bd);${lim>0&&r.loss>lim?'color:var(--x);':''}"><td style="text-align:left">${r.k}</td><td><b>${r.u}</b><div class="mu" style="font-size:10px">${bkTxt(r.parts)}</div></td><td>${r.st}</td><td>${bkFm(r.win)}</td><td>%${(r.p*100).toFixed(1)}</td></tr>`).join('')}</table></div>
- <div class="mu sm" style="margin-top:6px">Birimler gereken tutarın üstüne, seçili birimlerle yapılabilen en yakın tutara yuvarlanır. ${lim>0?'Kırmızı satırlar zarar limitini aşar. ':''}Bu tablo ihtimali değiştirmez, kaybı büyüterek kurtarmanın bedelini gösterir.</div>
- <div class="mu sm" style="margin-top:12px"><b>Son bahisler</b></div>${lg.length?`<table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right"><tr class=mu><th style="text-align:left">El</th><th>Sayı</th><th>Birim</th><th>Sonuç</th><th>Net</th></tr>${lg.map(e=>`<tr style="border-top:1px solid var(--bd)"><td style="text-align:left">${e.i+1}</td><td>${e.x}→${e.v}</td><td>${e.u}</td><td>${e.h?'✔':'✖'}</td><td style="color:${bkCl(e.n)}">${bkFm(e.n)}</td></tr>`).join('')}</table>`:'<div class="mu sm">Henüz bahis yok.</div>'}${st.n?`<button class=cen style="width:100%;margin-top:10px" onclick="bkReset()">Bahis kaydını sıfırla</button>`:''}</details>`;
+function bkSeries(){const out=[];let cur=null;
+ for(const e of BK.log){if(!cur)cur={a:e.i,k:0,cy:0,stk:0,mx:0,u0:e.u,T:(36-e.c)*e.u,done:0};
+  cur.k++;cur.cy+=e.n;cur.stk+=e.c*e.u;if(e.u>cur.mx)cur.mx=e.u;
+  if(cur.cy>=cur.T){cur.done=1;out.push(cur);cur=null}}
+ if(cur)out.push(cur);return out}
+function bkSpark(){
+ const pts=[0];let t=0;for(const e of BK.log){t+=e.n;pts.push(t)}
+ if(pts.length<2)return '<div class="mu sm">Grafik ilk bahisten sonra görünür.</div>';
+ const W=300,H=84,lo=Math.min(0,...pts),hi=Math.max(0,...pts),rg=(hi-lo)||1,
+ X=i=>i/(pts.length-1)*W,Y=v=>H-4-(v-lo)/rg*(H-8),
+ ln=pts.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
+ return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:84px;display:block"><line x1="0" x2="${W}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--bd)" stroke-dasharray="3 3"/><polyline points="${ln}" fill="none" stroke="${bkCl(t)}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`}
+const kt=(l,v,c)=>`<div class=kt><div class="mu sm">${l}</div><b style="color:${c||'var(--tx)'}">${v}</b></div>`;
+function tKazan(){
+ const z=bkZone(),st=bkState(),lim=BK.lim,c=z?z.c:21,w=36-c,rc=bkRec(z,st),sr=bkSeries(),
+ op=sr.length&&!sr[sr.length-1].done?sr[sr.length-1]:null,
+ base=BK.chips.includes(BK.base)?BK.base:BK.chips[0],rows=bkTable(base,c,8),lg=BK.log.slice(-10).reverse();
+ let pk=0,t=0,ls=0,lsMax=0,bigU=0,hitsU=0;
+ for(const e of BK.log){t+=e.n;if(t>pk)pk=t;if(e.h)ls=0;else{ls++;if(ls>lsMax)lsMax=ls}if(e.u>bigU)bigU=e.u}
+ const maxK=sr.reduce((m,s)=>Math.max(m,s.k),0),maxKat=sr.reduce((m,s)=>Math.max(m,s.mx/s.u0),0),
+ stop=lim>0&&st.tot<=-lim,
+ fl=op?op.cy:0,
+ H=`<div class=top><b>Kazan</b><span class="mu sm">${st.n} bahis · ${st.closed} seri kapandı</span></div>`;
+ let h=H;
+ // 1. anlık durum
+ h+=`<div class=card><div class=kg2><div><div class="mu sm">Toplam net</div><div style="font-size:30px;font-weight:700;color:${bkCl(st.tot)}">${bkFm(st.tot)}</div><div class="mu sm">birim</div></div>
+ <div><div class="mu sm">${op?(fl<0?'Anlık kayıp (açık seri)':fl>0?'Anlık kazanç (açık seri)':'Açık seri neti'):'Açık seri'}</div><div style="font-size:30px;font-weight:700;color:${op?bkCl(fl):'var(--mu)'}">${op?bkFm(fl):'Yok'}</div><div class="mu sm">${op?`hedef +${op.T} · kalan ${op.T-op.cy}`:'ilk birimi Ana ekranda seç'}</div></div></div>
+ <div style="margin-top:10px">${bkSpark()}</div><div class="mu sm">Toplam net grafiği · ${st.n} bahis</div></div>`;
+ // 2. bu el
+ if(stop)h+=`<div class=card style="border:2px solid var(--x)"><b style="color:var(--x);font-size:20px">DUR · zarar limiti doldu</b><div class="mu sm">${bkFm(st.tot)} / −${lim}</div></div>`;
+ else if(rc&&op){
+  const amt=rc.amt,kat=amt/op.u0,win=op.cy+w*amt,lossCy=op.cy-c*amt,nx=bkAmt(Math.max(1,Math.ceil((op.T-lossCy)/w))),over=lim>0&&st.tot-amt*c<=-lim;
+  h+=`<div class=card style="border:2px solid var(--ac)"><h3>Bu el: ${amt} birim <span class="mu sm">(${bkTxt(rc.parts)})</span></h3>
+  <div class=kg>${kt('Katlama','×'+(Math.round(kat*10)/10)+' · '+(op.k+1)+'. el')}${kt('Yatırılacak',amt*c+' ('+c+' sayı)')}
+  ${kt('Tutarsa',bkFm(win)+(win>=op.T?' · seri kapanır':''),'var(--ok)')}${kt('Tutmazsa',bkFm(lossCy),'var(--x)')}
+  ${kt('Seride toplam yatırım',op.stk+amt*c)}${kt('Tutmazsa sonraki el',nx+' birim (×'+(Math.round(nx/op.u0*10)/10)+')','var(--o)')}</div>
+  ${over?`<div style="color:var(--x);font-size:13px;margin-top:6px"><b>Bu tutar zarar limitini aşar.</b></div>`:''}
+  ${lim>0?`<div class="mu sm" style="margin-top:6px">Tutmazsa toplam net ${bkFm(st.tot-amt*c)} · limite kalan ${Math.max(0,lim+st.tot-amt*c)}</div>`:''}</div>`}
+ else h+=`<div class=card><h3>Bu el</h3><div class="mu sm">Açık seri yok. Aşağıdaki tabloda ilk birimi seç, Ana ekranda o birimi koy. ${z?'':'Bölge için veri yok.'}</div></div>`;
+ // 3. istatistik
+ h+=`<div class=card><h3>Tüm veriler</h3><div class=kg>
+ ${kt('Tutan / tutmayan',st.hits+' / '+(st.n-st.hits)+(st.n?' (%'+Math.round(st.hits/st.n*100)+')':''))}
+ ${kt('Yatırılan toplam',st.stk.toLocaleString('tr-TR'))}
+ ${kt('Getiri',st.stk?bkFm(Math.round(st.tot/st.stk*1000)/10)+'%':'–',bkCl(st.tot))}
+ ${kt('En yüksek kâr',bkFm(pk),'var(--ok)')}
+ ${kt('En derin düşüş','−'+st.mdd,'var(--x)')}
+ ${kt('En uzun kaçırma',lsMax+' el')}
+ ${kt('En çok katlama',maxK?maxK+' el · ×'+(Math.round(maxKat*10)/10):'–')}
+ ${kt('En büyük bahis',bigU?bigU+' birim':'–')}
+ ${kt('Kapanan seri',st.closed+(op?' (+1 açık)':''))}
+ </div></div>`;
+ // 4. limit
+ h+=`<div class=card><h3>Zarar limiti</h3><div class=cens style="flex-wrap:wrap;margin-top:0">${KL.map(v=>`<button class="cen ${lim===v?'on':''}" style="min-width:52px" onclick="bkLim(${v})">${v||'Kapalı'}</button>`).join('')}</div>
+ ${lim>0?`<div class=trk style="margin-top:8px"><div class="fill ${st.tot<=-lim?'x':st.tot<-lim*.5?'o':'ok'}" style="width:${Math.max(4,Math.min(100,(-st.tot)/lim*100))}%;color:#fff">${st.tot<0?-st.tot:0}</div></div><div class="mu sm">Kalan: <b>${Math.max(0,lim+st.tot)}</b> / ${lim} birim</div>`:'<div class="mu sm" style="margin-top:6px">Limit kapalı.</div>'}</div>`;
+ // 5. tablo
+ h+=`<div class=card><h3>Bu boyutla ne olur?</h3><div class="mu sm">İlk birim · ${c} sayı · hedef +${w*base}</div><div class=cens style="flex-wrap:wrap">${BK.chips.map(u=>`<button class="cen ${base===u?'on':''}" style="min-width:52px" onclick="bkBase(${u})">${u}</button>`).join('')}</div>
+ <div style="overflow-x:auto;margin-top:8px"><table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right"><tr class=mu><th style="text-align:left">El</th><th>Birim</th><th>Kat</th><th>Toplam yatırım</th><th>Tutarsa</th><th>Gelme</th></tr>${rows.map(r=>{const cur=op&&op.u0===base&&r.k===op.k+1;return `<tr style="border-top:1px solid var(--bd);${lim>0&&r.loss>lim?'color:var(--x);':''}${cur?'background:var(--n);font-weight:700':''}"><td style="text-align:left">${r.k}${cur?' ◀':''}</td><td><b>${r.u}</b><div class="mu" style="font-size:10px">${bkTxt(r.parts)}</div></td><td>×${Math.round(r.u/base*10)/10}</td><td>${r.loss}</td><td style="color:var(--ok)">${bkFm(r.win)}</td><td>%${(r.p*100).toFixed(1)}</td></tr>`}).join('')}</table></div>
+ <div class="mu sm" style="margin-top:6px">"Toplam yatırım" o el de tutmazsa toplam kaybındır. ${lim>0?'Kırmızı satırlar zarar limitini aşar. ':''}Birimler seçili birimlere yuvarlanır. Tablo ihtimali değiştirmez, kaybı büyüterek kurtarmanın bedelini gösterir.</div></div>`;
+ // 6. seriler
+ const ls8=sr.slice(-8).reverse();
+ h+=`<div class=card><h3>Seriler</h3>${ls8.length?`<table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right"><tr class=mu><th style="text-align:left">Seri</th><th>El</th><th>En yüksek</th><th>Yatırım</th><th>Net</th></tr>${ls8.map((s,i)=>`<tr style="border-top:1px solid var(--bd)"><td style="text-align:left">${sr.length-i}${s.done?' ✔':' ⏳'}</td><td>${s.k}</td><td>${s.mx} <span class=mu>(×${Math.round(s.mx/s.u0*10)/10})</span></td><td>${s.stk}</td><td style="color:${bkCl(s.cy)}">${bkFm(s.cy)}</td></tr>`).join('')}</table>`:'<div class="mu sm">Henüz seri yok.</div>'}</div>`;
+ // 7. son bahisler
+ h+=`<div class=card><h3>Son bahisler</h3>${lg.length?`<table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right"><tr class=mu><th style="text-align:left">El</th><th>Sayı</th><th>Birim</th><th>Sonuç</th><th>Net</th></tr>${lg.map(e=>`<tr style="border-top:1px solid var(--bd)"><td style="text-align:left">${e.i+1}</td><td>${e.x}→${e.v}</td><td>${e.u}</td><td>${e.h?'✔':'✖'}</td><td style="color:${bkCl(e.n)}">${bkFm(e.n)}</td></tr>`).join('')}</table>`:'<div class="mu sm">Henüz bahis yok.</div>'}
+ <div class=cens><button class=cen onclick="bkChipsSet()">Birimleri ayarla (${BK.chips.join('-')})</button>${st.n?`<button class=cen style="color:var(--x)" onclick="bkReset()">Kaydı sıfırla</button>`:''}</div></div>`;
  return h}
 function draw(){
- document.getElementById('v').innerHTML=[home,tOB,tGap,tAn][tab]();
+ document.getElementById('v').innerHTML=[home,tKazan,tOB,tGap,tAn][tab]();
  const nv=document.getElementById('nav');
  nv.innerHTML=[
    ['🎯','Ana'],
+   ['💰','Kazan'],
    ['🔁','Önce/Sonra'],
    ['📊','Gap'],
    ['🔬','Analiz']
