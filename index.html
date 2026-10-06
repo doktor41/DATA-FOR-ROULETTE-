@@ -13,7 +13,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 :root[data-theme="dark"]{--bg:#0e1814;--card:#15241e;--tx:#eef1ec;--mu:#8a9b92;--bd:#243730;--ac:#d4a24c;--n:#22352d}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:480px;margin:0 auto;padding:0 12px calc(var(--nh,58px) + 270px)}
+main{max-width:480px;margin:0 auto;padding:0 12px calc(var(--nh,58px) + var(--ph,220px) + 14px)}
 button{font:inherit;color:inherit;cursor:pointer}
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:8px;padding:10px 0;justify-content:space-between}
 .top b{font-size:17px}.mu{color:var(--mu)}.sm{font-size:12px}
@@ -42,9 +42,9 @@ select{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-
 .num{height:50px;border:0;border-radius:10px;color:#fff;font-size:19px;font-weight:600}
 .num:active{transform:scale(.94);filter:brightness(1.25)}
 .num.z{grid-column:1/-1;height:46px}
-.gb{margin:10px 0}.gh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.gb{margin:8px 0}.gh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .gh span{font-size:12px}
-.trk{height:30px;background:var(--n);border-radius:8px;overflow:hidden;margin-top:4px}
+.trk{height:26px;background:var(--n);border-radius:8px;overflow:hidden;margin-top:4px}
 .fill{height:100%;display:flex;align-items:center;padding-left:10px;font-weight:700;color:#fff;min-width:34px;border-radius:8px}
 .fill.n{background:#6f8078}.fill.y{background:var(--y)}.fill.o{background:var(--o)}.fill.x{background:var(--x)}.fill.ok{background:var(--ok)}
 h4{margin:16px 0 0;font-size:14px;color:var(--ac)}
@@ -59,8 +59,8 @@ nav button i{display:block;font-style:normal;font-size:20px}nav .on{color:var(--
 .reg{margin-top:8px;font-size:13px;word-break:break-word}
 #pnl{position:fixed;left:0;right:0;bottom:var(--nh,58px);max-width:480px;margin:0 auto;background:var(--card);border:1px solid var(--bd);border-radius:14px 14px 0 0;padding:8px 10px 6px;z-index:8}
 .pa{display:flex;gap:6px;margin-bottom:6px}.pa button{flex:1;height:32px;border-radius:9px;border:1px solid var(--bd);background:var(--bg);font-size:13px}.pa .del{color:var(--x)}.pa .del.sure{background:var(--x);color:#fff}.pa button:disabled{opacity:.4}
-.pg{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;justify-items:center}
-.nb{width:34px;height:34px;border-radius:50%;border:0;color:#fff;font-weight:600;font-size:13px;padding:0}.nb.r{background:#c8402f}.nb.b{background:#1d2421;box-shadow:inset 0 0 0 1px #4a5a52}.nb.g{background:#1f8f4e}.nb:active{transform:scale(.9);filter:brightness(1.3)}
+.pg{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.nb{width:100%;height:36px;border-radius:8px;border:0;color:#fff;font-weight:600;font-size:14px;padding:0}.nb.r{background:#c8402f}.nb.b{background:#1d2421;box-shadow:inset 0 0 0 1px #4a5a52}.nb.g{background:#1f8f4e}.nb:active{transform:scale(.9);filter:brightness(1.3)}
 #ov{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;padding:env(safe-area-inset-top,0px) 12px env(safe-area-inset-bottom,0px)}#ov:empty{display:none}.ovc{max-width:480px;margin:0 auto;padding-bottom:30px}
 .acts2{display:flex;gap:8px;margin:8px 0}.acts2 button{flex:1;height:40px;border-radius:10px;border:1px solid var(--bd);background:var(--bg)}.acts2 .dg{color:var(--x)}.acts2 button:disabled{opacity:.4}
 textarea{width:100%;height:84px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:8px;font:inherit;resize:vertical}
@@ -76,7 +76,7 @@ textarea{width:100%;height:84px;background:var(--bg);color:var(--tx);border:1px 
 .big{font-size:22px;font-weight:700;line-height:1.2}
 .bar{display:flex;height:26px;border-radius:8px;overflow:hidden;background:var(--n);margin-top:4px;font-size:11px;color:#fff;font-weight:600}
 .bar>div{display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;white-space:nowrap}
-</style></head><body>
+.seg.full{display:flex}.seg.full button{flex:1}.card.sub{padding:8px 12px}</style></head><body>
 <main id="v"></main><nav id="nav"></nav><div id="toast"></div><div id="ov"></div><div id="pw"></div>
 <script>
 const W=[0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
@@ -87,7 +87,7 @@ const regA=(c,N)=>{const a=[];for(let k=-N;k<=N;k++)a.push(W[(P[c]+k+37)%37]);re
 const R={2:[],3:[]};for(const N of[2,3])for(let c=0;c<37;c++)R[N][c]=new Set(regA(c,N));
 const rng=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
 const mk=(name,arr,sub)=>({name,set:new Set(arr),size:arr.length,sub});
-let S=[],N=3,tab=0,scope=0,sortG=false,st=0,clr=0,hist=0,openC=null,pt='';let th=2.5,alAll=0,openW=null,pgW=1,pgAll=0;try{th=+localStorage.getItem('rt_th')||2.5}catch(e){}
+let gt=0,at=0,btMore=0;let S=[],N=3,tab=0,scope=0,sortG=true,st=0,clr=0,hist=0,openC=null,pt='';let th=2.5,alAll=0,openW=null,pgW=1,pgAll=0;try{th=+localStorage.getItem('rt_th')||2.5}catch(e){}
 try{S=JSON.parse(localStorage.getItem('rt_s')||'[]');N=3}catch(e){}
 const save=()=>{try{localStorage.setItem('rt_s',JSON.stringify(S));localStorage.setItem('rt_n',N)}catch(e){}};
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1600)}
@@ -109,29 +109,33 @@ function alertList(){return allGroups().map(g=>{const cur=gs(g,S).cur;return{nam
 function setTH(v){th=v;try{localStorage.setItem('rt_th',v)}catch(e){}draw()}
 function alerts(){
  if(!S.length)return '';
- const L=alertList(),sh=alAll?L:L.slice(0,5);
- return `<div class=card><h3>Uyarılar <span class="mu sm">(düzine/kolon: 6 el · diğerleri: ${th}x)</span></h3><div class=seg style="margin:0 0 8px;display:inline-flex">${[2,2.5,3,4].map(v=>`<button class="${th==v?'on':''}" onclick="setTH(${v})">${v}x</button>`).join('')}</div>${L.length?sh.map(a=>`<div class=al><span><b>${a.name}</b> · ${a.cur} eldir gelmedi</span><span class="bg2 ${a.r<3?'y':a.r<4?'o':'x'}">${a.r.toFixed(1)}x</span></div>`).join('')+(L.length>5?`<button class=more onclick="alAll=!alAll;draw()">${alAll?'Daha az':'+'+(L.length-5)+' uyarı daha'}</button>`:''):'<div class="mu sm">Şu an uyarı yok.</div>'}</div>`}
-function add(n){const b=alertList().map(a=>a.name);S.push(n);save();const nw=alertList().filter(a=>!b.includes(a.name));
+ const L=alertList(),sh=alAll?L:L.slice(0,3);
+ return `<div class=card><h3>Uyarılar <span class="mu sm">(düzine/kolon: 6 el · diğerleri: ${th}x)</span></h3>${alAll?`<div class=seg style="margin:0 0 8px;display:inline-flex">${[2,2.5,3,4].map(v=>`<button class="${th==v?'on':''}" onclick="setTH(${v})">${v}x</button>`).join('')}</div>`:''}${L.length?sh.map(a=>`<div class=al><span><b>${a.name}</b> · ${a.cur} eldir gelmedi</span><span class="bg2 ${a.r<3?'y':a.r<4?'o':'x'}">${a.r.toFixed(1)}x</span></div>`).join('')+(L.length>3?`<button class=more onclick="alAll=!alAll;draw()">${alAll?'Daha az':'+'+(L.length-3)+' uyarı daha'}</button>`:''):'<div class="mu sm">Şu an uyarı yok.</div>'}</div>`}
+function add(n){const b=alertList().map(a=>a.name);const bm=bkResolve(n);S.push(n);save();const nw=alertList().filter(a=>!b.includes(a.name));
  try{navigator.vibrate&&navigator.vibrate(nw.length?[40,60,40]:12)}catch(e){}
- draw();if(nw.length)toast('⚠ '+nw[0].name+': '+nw[0].cur+' eldir gelmedi'+(nw.length>1?' (+'+(nw.length-1)+')':''))}
-function undo(){if(!S.length)return;const x=S.pop();save();toast(x+' silindi');draw()}
-function clearAll(){if(!S.length)return;if(!clr){clr=1;draw();setTimeout(()=>{if(clr){clr=0;draw()}},3000)}else{S=[];clr=0;save();toast('Tüm veri silindi');draw()}}
+ draw();if(bm&&!nw.length)toast(bm);if(nw.length)toast('⚠ '+nw[0].name+': '+nw[0].cur+' eldir gelmedi'+(nw.length>1?' (+'+(nw.length-1)+')':''))}
+function undo(){if(!S.length)return;const x=S.pop();const bl=BK.log[BK.log.length-1];if(bl&&bl.i===S.length){BK.pend=bl.u;BK.log.pop()}else BK.pend=0;saveBK();save();toast(x+' silindi');draw()}
+function clearAll(){if(!S.length)return;if(!clr){clr=1;draw();setTimeout(()=>{if(clr){clr=0;draw()}},3000)}else{S=[];clr=0;BK.log=[];BK.pend=0;saveBK();save();toast('Tüm veri silindi');draw()}}
 function setN(n){N=n;save();draw()}
 function top3(h,X,n,k=1){
  const nx=[];for(let j=0;j<h.length-1;j++)if(h[j]===X)for(let q=1;q<=k&&j+q<h.length;q++)nx.push([h[j+q],j+q]);
  if(!nx.length)return null;
  let rest=nx.slice();const out=[];
- for(let r=0;r<3;r++){
-  if(!rest.length)rest=nx.slice();
-  let best=null;
+ const far=c=>out.every(o=>Math.min((P[c]-P[o.c]+37)%37,(P[o.c]-P[c]+37)%37)>=2*n+1);
+ const pick=pool=>{let best=null;
   for(let c=0;c<37;c++){
-   if(out.some(o=>o.c===c))continue;
+   if(!far(c))continue;
    let sc=0,last=-1,self=0;
-   for(const[v,ix]of rest)if(R[n][c].has(v)){sc++;if(ix>last)last=ix}
+   for(const[v,ix]of pool)if(R[n][c].has(v)){sc++;if(ix>last)last=ix}
    if(!sc)continue;
    for(const[v]of nx)if(v===c){self=1;break}
    const o={c,sc,last,self,d:Math.min(P[c],37-P[c])};
    if(!best||o.sc>best.sc||o.sc==best.sc&&(o.last>best.last||o.last==best.last&&(o.self>best.self||o.self==best.self&&o.d<best.d)))best=o}
+  return best};
+ for(let r=0;r<3;r++){
+  if(!rest.length)rest=nx.slice();
+  let best=pick(rest);
+  if(!best)best=pick(nx);
   if(!best)break;
   out.push(best);rest=rest.filter(([v])=>!R[n][best.c].has(v))}
  return{n:nx.length,t:out,nx}}
@@ -164,7 +168,7 @@ function tOB(){
  const grp=Object.entries(gd).filter(([,c])=>c>=2).sort((x,y)=>y[1]-x[1]||x[0]-y[0]);
  const nm=["0'lar","1'ler","2'ler","3'ler","4'ler","5'ler","6'lar","7'ler","8'ler","9'lar"];
  return `<div class=top><b>Önce / Sonra</b><i class="ball sm ${col(X)}">${X}</i></div>
- <div class=card><h3>${X} öncesi ve sonrası</h3>${rows}${occ.length>12?`<button class=more onclick="pgAll=!pgAll;draw()">${pgAll?'Daha az':'Tümünü göster ('+occ.length+')'}</button>`:''}</div>
+ ${wide(X)}<div class=card><h3>${X} öncesi ve sonrası</h3>${rows}${occ.length>12?`<button class=more onclick="pgAll=!pgAll;draw()">${pgAll?'Daha az':'Tümünü göster ('+occ.length+')'}</button>`:''}</div>
  <div class=card><h3>${X} sonrasında gelenler</h3><div class=seg style="display:inline-flex;margin-bottom:8px">${[1,2].map(v=>`<button class="${pgW==v?'on':''}" onclick="pgW=${v};draw()">Sonraki ${v} el</button>`).join('')}</div>
  <div class="mu sm" style="margin-bottom:4px">En az 2 kez gelenler</div>
  ${nums.length?`<div class=fl>${nums.map(([v,c])=>`<div class=fi><span class="chip ${col(+v)}">${v}</span><span class=sm>${c} kere</span></div>`).join('')}</div>`:'<div class="mu sm">Henüz en az 2 kez tekrar eden sayı yok.</div>'}
@@ -440,6 +444,34 @@ const BT_STRATS = [
     for(let k=-4;k<=4;k++)nums.push(W[(bj+k+37)%37]);
     return {nums, exp:9/37, diff:bj};
   }},
+  {name:'36 sonrası sonu 2/3 (8 sayı)', fn:(arr,u)=>{
+    if(u<1||arr[u-1]!==36)return null;
+    return {nums:[2,12,22,32,3,13,23,33], exp:8/37, group:'36 sonrası sonu 2 veya 3'};
+  }},
+  {name:'Önceki son rakam (4 sayı)', fn:(arr,u)=>{
+    if(u<1)return null;
+    const d=arr[u-1]%10;
+    const nums=[d,d+10,d+20,d+30].filter(n=>n<=36);
+    return {nums, exp:nums.length/37, group:'önceki sayıyla aynı son rakam'};
+  }},
+  {name:'Önceki son rakam ±1 (8 sayı)', fn:(arr,u)=>{
+    if(u<1)return null;
+    const d=arr[u-1]%10, ds=[(d+9)%10,d,(d+1)%10], nums=[];
+    for(const x of ds)for(let n=0;n<=36;n++)if(n%10===x&&!nums.includes(n))nums.push(n);
+    return {nums, exp:nums.length/37, group:'önceki son rakamın komşu rakamları'};
+  }},
+  {name:'Önceki sayının aynı düzinesi (12 sayı)', fn:(arr,u)=>{
+    if(u<1||arr[u-1]===0)return null;
+    const d=Math.floor((arr[u-1]-1)/12);
+    const nums=rng(d*12+1,d*12+12);
+    return {nums, exp:12/37, group:'önceki sayının düzinesi'};
+  }},
+  {name:'Önceki sayının aynı kolonu (12 sayı)', fn:(arr,u)=>{
+    if(u<1||arr[u-1]===0)return null;
+    const c=arr[u-1]%3||3;
+    const nums=rng(1,36).filter(n=>n%3===c);
+    return {nums, exp:12/37, group:'önceki sayının kolonu'};
+  }},
   {name:'Markov (en sık 9)', fn:(arr,u)=>{
     if(u<50)return null;
     const X=arr[u-1];
@@ -555,15 +587,6 @@ function tBacktest(){
   const L=S.length;
   let h=`<div class=top><b>🔬 Backtest</b><span class="mu sm">${L} el</span></div>`;
 
-  // Veri girişi en üstte
-  h+=`<div class=card><h3>📥 Veri</h3>
-    <div class="mu sm" style="margin-bottom:6px">Sayıları virgül/boşlukla yapıştır (eskiden yeniye).</div>
-    <textarea id=bt-ta placeholder="1,14,12,22,17,28,..."></textarea>
-    <div class=acts2><button onclick=btImport(0)>Sona Ekle</button><button onclick=btImport(1)>Üzerine Yaz</button></div>
-    <div class=acts2><button onclick=btExport()>📋 Kopyala</button><button onclick="if(confirm('Tüm veri silinsin mi?')){S=[];save();draw()}">🗑️ Sil</button></div>
-    <div class="mu sm">Mevcut: <b>${L}</b> el</div>
-  </div>`;
-
   if(L<40){
     h+=`<div class="card mu">Backtest için en az 40 el gerekli.</div>`;
     return h;
@@ -605,6 +628,7 @@ function tBacktest(){
   });
   h+=`</div>`;
 
+  if(!btMore)h+=`<button class=more onclick="btMore=1;draw()">Daha fazla detay</button>`;else{
   // 5. Sayı bazlı frekans
   const freq=btFreq(S);
   h+=`<div class=card><h3>🔢 Sayı Frekansları</h3>
@@ -641,6 +665,7 @@ function tBacktest(){
   }
   h+=`</div>`;
 
+  h+=`<button class=more onclick="btMore=0;draw()">Detayı gizle</button>`;}
   // 7. Uyarı
   h+=`<div class="mu sm" style="padding:4px 2px 12px">⚠️ Bu analiz geçmişe bakarak yapılıyor. Rulet bağımsız olaydır, geçmiş geleceği garanti etmez. Bahis başına beklenen kayıp ≈ %2.7.</div>`;
 
@@ -676,6 +701,22 @@ function btExport(){
 // ============================================================
 // ANA SAYFA - üstüne "şu an önerilen" ekle
 // ============================================================
+function btCard(){
+ const L=S.length,st=149;
+ if(L<=st)return `<div class="card sub"><h3>Geriye dönük test</h3><div class="mu sm">150. elden başlar. Şu an ${L} el var.</div></div>`;
+ let n=0,hit=0,net=0,skip=0,pk=0,mdd=0,stake=0;const cv=[];
+ for(let i=st;i<L;i++){const e=evalAt(i);if(!e){skip++;continue}
+  n++;stake+=e.cov;if(e.hit){hit++;net+=36-e.cov}else net-=e.cov;
+  if(net>pk)pk=net;if(pk-net>mdd)mdd=pk-net;cv.push(net)}
+ if(!n)return `<div class="card sub"><h3>Geriye dönük test</h3><div class="mu sm">Oynanabilir el yok.</div></div>`;
+ const sg=v=>(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(v%1?2:0),mn=Math.min(0,...cv),mx=Math.max(0,...cv),rg=(mx-mn)||1;
+ const pts=cv.map((v,k)=>(k/Math.max(1,cv.length-1)*300).toFixed(1)+','+(58-(v-mn)/rg*56).toFixed(1)).join(' '),zy=(58-(0-mn)/rg*56).toFixed(1);
+ return `<div class="card sub"><h3>Geriye dönük test <span class="mu sm">(150. elden bugüne)</span></h3>
+ <div class="mu sm">Her el, o ele kadarki veriyle seçilen 3 merkezin bölgelerine (${Math.round(stake/n)} sayı) 1'er birim.</div>
+ <div class="rt" style="margin-top:6px">Oynanan <b>${n}</b> el · tutan <b>${hit}</b> (%${(hit/n*100).toFixed(1)})</div>
+ <div class="rt">Net <b>${sg(net)}</b> birim · el başı ${sg(net/n)} · yatırılana göre ${sg(net/stake*100)}%</div>
+ <div class="mu sm">En derin düşüş −${mdd} birim · rastgele beklenti ≈ ${sg(-0.027*stake)} birim${skip?` · ${skip} el veri yok, oynanmadı`:''}</div>
+ <svg viewBox="0 0 300 60" width="100%" height="60" style="margin-top:6px"><line x1="0" y1="${zy}" x2="300" y2="${zy}" stroke="#999" stroke-width="0.5" stroke-dasharray="3"/><polyline points="${pts}" fill="none" stroke="#c0392b" stroke-width="1.2"/></svg></div>`}
 function home(){
  const L=S.length,X=L?S[L-1]:null,HI=hitInfo().hit;
  const st=Math.max(0,L-10),ev=[];
@@ -684,30 +725,22 @@ function home(){
  let h=`<div class=top><b>Rulet Takip</b><span class="mu sm">${L} el</span></div>`;
  h+=`<div class=card>${X===null?'<span class=mu>Henüz el yok. Aşağıdan sayıya dokun.</span>':`<div class=last><i class="ball ${col(X)}${hc(ev.length-1)}">${X}</i><div class=strip>${S.slice(-10).map((n,k)=>`<span class="chip ${col(n)}${hc(k)}">${n}</span>`).join('')}</div></div><div class=rt>${ok.length?`Tutan <b>${hits}/${ok.length}</b> · %${Math.round(hits/ok.length*100)} · rastgele ≈ %${Math.round(base)}`:'Doğrulama için en az 2 el gerekir'}</div>`}</div>`;
 
- // YENİ: Backtest önerisi
- if(L>=40){
-   const best=btBestNow(S);
-   if(best){
-     const strat=BT_STRATS.find(s=>s.name===best.name);
-     const r=strat.fn(S,S.length);
-     if(r){
-       h+=`<div class=card><h3>🎯 Backtest Önerisi</h3>
-       <div class="mu sm">Strateji: <b>${best.name}</b> · geçmişte %${(best.actual*100).toFixed(1)} tuttu (bekl. %${(best.exp*100).toFixed(1)}, z=${best.z.toFixed(2)})${r.group?' · '+r.group:''}${r.gap?' · '+r.gap+' eldir gelmiyor':''}</div>
-       <div class=chips style="margin-top:6px">${r.nums.map(n=>`<span class="chip ${col(n)}">${n}</span>`).join('')}</div>
-       </div>`;
-     }
-   }
- }
-
- let c1;
+  let c1;
  if(X===null)c1='<p class=mu>Sayı girince burada görünür.</p>';
  else{const t=top3(S,X,N);
   if(!t)c1=`<p class=mu>${X} sayısından sonra henüz veri yok.</p>`;
   else{
    if(openC!==null&&!t.t.some(o=>o.c===openC))openC=null;
    c1=`<div class="mu sm">${X} sonrası ${t.n} örnek · 3 merkez <b>${HI.size}/${t.n}</b> tutuyor (%${Math.round(HI.size/t.n*100)})${t.n<3?' · veri az':''}</div><div class=cens>${t.t.map((o,i)=>`<button class="cen ${openC===o.c?'on':''}" onclick="openC=${openC===o.c?'null':o.c};draw()"><b class=rk>${i+1}</b><i class="ball sm ${col(o.c)}">${o.c}</i><span class="mu sm">${o.sc}/${t.n}</span></button>`).join('')}</div>${openC!==null?`<div class=reg><b>${openC} bölgesi:</b> ${regA(openC,N).join('-')}</div>`:''}`}}
+ h+=bkTop();
  h+=`<div class=card><h3>Sonraki Bölgeler</h3>${c1}</div>`;
- h+=wide(X);
+ if(X!==null){const tb=top3(S,X,N);
+  if(tb){const ev2=tb.nx.map(([v,ix])=>[v,ix,evalAt(ix)]).filter(a=>a[2]),ms=ev2.filter(a=>!a[2].hit).map(a=>[a[0],a[1]]),l5=ms.slice(-5).reverse();
+   h+=`<div class="card sub"><h3>Ritmi bozan sayılar <span class="mu sm">(${X} sonrası ${ms.length}/${ev2.length} tutmadı)</span></h3>${l5.length?`<div class=hl style="grid-template-columns:repeat(5,1fr)">${l5.map(([v,ix])=>`<div class=hi><i class="ball sm ${col(v)}">${v}</i><span class="mu sm">${ix+1}. el</span></div>`).join('')}</div><div class="mu sm" style="margin-top:4px">Solda en yeni. Bölgelerin dışında gelen sayılar.</div>`:'<div class="mu sm">Bozan yok, bu sayıdan sonra gelenlerin hepsi tuttu.</div>'}</div>`;
+   const cv2=new Set(tb.t.flatMap(o=>[...R[N][o.c]])),nowOut=tb.nx.filter(([v])=>!cv2.has(v)).length,com=ev2.filter(a=>!a[2].hit&&!cv2.has(a[0])).map(a=>[a[0],a[1]]),c5=com.slice(-5).reverse();
+   h+=`<div class="card sub"><h3>Kararlı bozanlar <span class="mu sm">(${X} sonrası ${com.length}/${ev2.length} ortak)</span></h3>${c5.length?`<div class=hl style="grid-template-columns:repeat(5,1fr)">${c5.map(([v,ix])=>`<div class=hi><i class="ball sm ${col(v)}">${v}</i><span class="mu sm">${ix+1}. el</span></div>`).join('')}</div>`:'<div class="mu sm">Ortak bozan yok.</div>'}<div class="mu sm" style="margin-top:4px">Hem geldiği andaki bölgelerin hem şimdiki bölgelerin dışında kalanlar. Şimdiki bölgelere göre ${nowOut}/${tb.n}, geldiği andakilere göre ${ms.length}/${ev2.length} dışarıda.</div></div>`}}
+ h+=btCard();
+ h+=bkMore();
  h+=alerts();
  return h}
 
@@ -738,13 +771,16 @@ function sec(title,gr){
  return (title?`<h4>${title}</h4>`:'')+a.map(({g,s})=>{
   const e=37/g.size,r=s.cur/e,k=s.cur==0?'ok':r<1?'n':r<2?'y':r<3?'o':'x';
   const w=s.cur==0?10:Math.max(10,Math.min(100,s.cur/Math.max(s.rec,1)*100));
-  return `<div class=gb><div class=gh><b>${g.name}</b><span class=mu>rekor ${s.rec} · ort ${e.toFixed(1)} · ${s.hits}x</span></div><div class=trk><div class="fill ${k}" style="width:${w}%">${s.cur}</div></div>${g.sub?`<div class="mu sm">${g.sub}</div>`:''}</div>`}).join('')}
+  return `<div class=gb><div class=gh><b>${g.name}</b><span class=mu>rekor ${s.rec}</span></div><div class=trk><div class="fill ${k}" style="width:${w}%">${s.cur}</div></div>${g.sub?`<div class="mu sm">${g.sub}</div>`:''}</div>`}).join('')}
 function head(t,extra){return `<div class=top><b>${t}</b><div style="display:flex;gap:6px"><select onchange="scope=+this.value;draw()">${[[0,'Tümü'],[50,'Son 50'],[100,'Son 100'],[200,'Son 200']].map(([v,n])=>`<option value=${v} ${scope==v?'selected':''}>${n}</option>`).join('')}</select><div class=seg><button class="${sortG?'on':''}" onclick="sortG=!sortG;draw()">Gap sırası</button></div></div></div>${extra||''}`}
 const empty='<div class="card mu">Yeterli veri yok. Aşağıdan sayı gir.</div>';
-function t2(){
- if(!S.length)return head('Dış Bahisler')+empty;
+const GT=['Dış bahis','Son rakam','Çizgi'];
+function gseg(){return `<div class="seg full" style="margin:0 0 8px">${GT.map((n,i)=>`<button class="${gt==i?'on':''}" onclick="gt=${i};draw()">${n}</button>`).join('')}</div>`}
+function t2(pre){
+ const H=head('Gap',pre);
+ if(!S.length)return H+empty;
  const col3=k=>rng(1,36).filter(n=>n%3==k%3);
- return head('Dış Bahisler')
+ return H
  +sec('Düzineler',[mk('1. düzine (1-12)',rng(1,12)),mk('2. düzine (13-24)',rng(13,24)),mk('3. düzine (25-36)',rng(25,36))])
  +sec('Kolonlar',[mk('1. kolon',col3(1)),mk('2. kolon',col3(2)),mk('3. kolon',col3(0))])
  +sec('Renk',[mk('Kırmızı',[...RED]),mk('Siyah',rng(1,36).filter(n=>!RED.has(n)))])
@@ -752,30 +788,94 @@ function t2(){
  +sec('Alçak / Yüksek',[mk('Alçak (1-18)',rng(1,18)),mk('Yüksek (19-36)',rng(19,36))])
  +sec('Sıfır',[mk('Sıfır (0)',[0])])
  +sec('Çark Bölgeleri',[mk('Voisins du Zéro',[22,18,29,7,28,12,35,3,26,0,32,15,19,4,21,2,25],'22-18-29-7-28-12-35-3-26-0-32-15-19-4-21-2-25'),mk('Tiers du Cylindre',[27,13,36,11,30,8,23,10,5,24,16,33],'27-13-36-11-30-8-23-10-5-24-16-33'),mk('Orphelins',[1,20,14,31,9,17,34,6],'1-20-14-31-9-17-34-6')])}
-function t3(){
- if(!S.length)return head('Son Rakamlar')+empty;
+function t3(pre){
+ const H=head('Gap',pre);
+ if(!S.length)return H+empty;
  const nm=["0'lar","1'ler","2'ler","3'ler","4'ler","5'ler","6'lar","7'ler","8'ler","9'lar"];
- return head('Son Rakamlar')+sec('',nm.map((n,d)=>{const a=rng(0,36).filter(x=>x%10==d);return mk(n,a,a.join('-'))}))}
-function t4(){
- const seg=`<div class=seg style="margin:0 0 4px"><button class="${st==0?'on':''}" onclick="st=0;draw()">Çizgi (3'lü)</button><button class="${st==1?'on':''}" onclick="st=1;draw()">Çift çizgi (6'lı)</button></div>`;
- if(!S.length)return head('Çizgiler',seg)+empty;
+ return H+sec('',nm.map((n,d)=>{const a=rng(0,36).filter(x=>x%10==d);return mk(n,a,a.join('-'))}))}
+function t4(pre){
+ const seg=`<div class=seg style="margin:0 0 8px"><button class="${st==0?'on':''}" onclick="st=0;draw()">3'lü</button><button class="${st==1?'on':''}" onclick="st=1;draw()">6'lı</button></div>`;
+ const H=head('Gap',pre+seg);
+ if(!S.length)return H+empty;
  const g=st==0?rng(0,11).map(k=>{const a=rng(3*k+1,3*k+3);return mk(a.join('-'),a)}):rng(0,10).map(k=>{const a=rng(3*k+1,3*k+6);return mk(a.join('-'),a)});
- return head('Çizgiler',seg)+sec('',g)}
+ return H+sec('',g)}
+function tGap(){return [t2,t3,t4][gt](gseg())}
+const AN=['Olasılık','Plus','Backtest'];
+function tAn(){
+ const body=[tOl,tPlus,tBacktest][at]().replace(/^\s*<div class=top>.*?<\/div>/,'');
+ return `<div class=top><b>Analiz</b><span class="mu sm">${S.length} el</span></div><div class="seg full" style="margin:0 0 8px">${AN.map((n,i)=>`<button class="${at==i?'on':''}" onclick="at=${i};draw();scrollTo(0,0)">${n}</button>`).join('')}</div>`+body}
+const KL=[0,500,1000,2000,5000];
+let BK={log:[],pend:0,lim:0,base:4,chips:[4,8,20,40]};
+let bkOpen=false;
+try{const b=JSON.parse(localStorage.getItem('rt_bk')||'null');if(b&&Array.isArray(b.log))BK=Object.assign(BK,b);if(!Array.isArray(BK.chips)||!BK.chips.length)BK.chips=[4,8,20,40]}catch(e){}
+const saveBK=()=>{try{localStorage.setItem('rt_bk',JSON.stringify(BK))}catch(e){}};
+const bkFm=v=>(v>0?'+':v<0?'−':'')+Math.abs(Math.round(v*100)/100).toLocaleString('tr-TR'),bkCl=v=>v>0?'var(--ok)':v<0?'var(--x)':'var(--mu)';
+const bkG=(a,b)=>b?bkG(b,a%b):a;
+function bkStep(){return BK.chips.reduce(bkG,0)||1}
+function bkParts(a){
+ const ch=[...BK.chips].sort((x,y)=>y-x);if(a<=0)return [];
+ if(a<=20000){const INF=1e9,d=new Array(a+1).fill(INF),pv=new Array(a+1).fill(0);d[0]=0;
+  for(let v=1;v<=a;v++)for(const c of ch)if(c<=v&&d[v-c]+1<d[v]){d[v]=d[v-c]+1;pv[v]=c}
+  if(d[a]>=INF)return null;const m={};for(let v=a;v>0;v-=pv[v])m[pv[v]]=(m[pv[v]]||0)+1;
+  return ch.filter(c=>m[c]).map(c=>[c,m[c]])}
+ let r=a;const o=[];for(const c of ch){const n=Math.floor(r/c);if(n){o.push([c,n]);r-=n*c}}return r?null:o}
+function bkAmt(need){const g=bkStep();let a=Math.max(g,Math.ceil(need/g)*g);for(let i=0;i<300;i++,a+=g)if(bkParts(a))return a;return Math.ceil(need)}
+const bkTxt=p=>p?p.map(([c,n])=>n>1?n+'×'+c:''+c).join(' + '):'';
+function bkZone(){const L=S.length;if(!L)return null;const t=top3(S,S[L-1],N);if(!t)return null;const cv=new Set(t.t.flatMap(o=>[...R[N][o.c]]));return{t:t.t,cv,c:cv.size}}
+function bkState(){let tot=0,cy=0,T=0,k=0,closed=0,hits=0,stk=0,pk=0,mdd=0;
+ for(const e of BK.log){if(k===0)T=(36-e.c)*e.u;cy+=e.n;k++;tot+=e.n;stk+=e.c*e.u;if(e.h)hits++;if(tot>pk)pk=tot;if(pk-tot>mdd)mdd=pk-tot;if(cy>=T){closed++;cy=0;k=0;T=0}}
+ return{tot,cy,T,k,closed,hits,stk,mdd,n:BK.log.length}}
+function bkRec(z,st){if(!z||st.k===0)return null;const need=Math.max(1,Math.ceil((st.T-st.cy)/(36-z.c))),amt=bkAmt(need);return{need,amt,parts:bkParts(amt)}}
+function bkResolve(n){if(!BK.pend)return '';const u=BK.pend;BK.pend=0;const z=bkZone();if(!z){saveBK();return ''}
+ const h=z.cv.has(n),net=(h?36*u:0)-z.c*u;BK.log.push({i:S.length,x:S[S.length-1],v:n,u,c:z.c,h:h?1:0,n:net});saveBK();
+ return (h?'Tuttu +':'Tutmadı −')+Math.abs(net)+' birim'}
+function bkAdd(u){const z=bkZone();if(!z)return;const np=BK.pend+u;if(BK.lim>0&&bkState().tot-np*z.c<=-BK.lim){toast('Zarar limiti aşılır');return}BK.pend=np;saveBK();draw()}
+function bkClear(){BK.pend=0;saveBK();draw()}
+function bkApply(){const z=bkZone(),r=bkRec(z,bkState());if(!r)return;if(BK.lim>0&&bkState().tot-r.amt*z.c<=-BK.lim){toast('Zarar limiti aşılır');return}BK.pend=r.amt;saveBK();draw()}
+function bkLim(v){BK.lim=v;if(BK.pend&&v>0){const z=bkZone();if(z&&bkState().tot-BK.pend*z.c<=-v)BK.pend=0}saveBK();draw()}
+function bkBase(u){BK.base=u;saveBK();draw()}
+function bkChipsSet(){const r=prompt('Birimler (virgülle ayır, en çok 8)',BK.chips.join(','));if(r===null)return;
+ const v=[...new Set(r.split(/[,\s]+/).map(x=>Math.round(+x)).filter(x=>x>=1&&x<=100000))].sort((a,b)=>a-b).slice(0,8);
+ if(!v.length){toast('Geçersiz birim');return}BK.chips=v;if(!v.includes(BK.base))BK.base=v[0];BK.pend=0;saveBK();draw()}
+function bkReset(){if(confirm('Bahis kaydı silinsin mi?')){BK.log=[];BK.pend=0;saveBK();draw()}}
+function bkTable(base,c,rows=8){const out=[],T=(36-c)*base;let sum=0;
+ for(let k=1;k<=rows;k++){const u=k==1?base:bkAmt((T+c*sum)/(36-c));out.push({k,u,st:u*c,win:(36-c)*u-c*sum,loss:c*(sum+u),p:Math.pow((37-c)/37,k-1),parts:bkParts(u)});sum+=u}return out}
+function bkTop(){
+ if(!S.length)return '';const z=bkZone();if(!z)return '';
+ const st=bkState(),lim=BK.lim,stop=lim>0&&st.tot<=-lim,c=z.c,rc=bkRec(z,st);
+ if(stop)return `<div class=card style="border:2px solid var(--x)"><b style="color:var(--x);font-size:20px">DUR · zarar limiti doldu</b><div class="mu sm">${bkFm(st.tot)} / −${lim}</div></div>`;
+ let h=`<div class=card style="${rc?'border:2px solid var(--ac);':''}">`;
+ if(rc){h+=`<div style="font-size:22px;font-weight:700;color:var(--ac)">Bu el ${rc.amt} birim koy</div><div class="mu sm">${bkTxt(rc.parts)} · açık seri ${st.k} bahis · seri neti ${bkFm(st.cy)} · hedef +${st.T}</div>`;
+  if(lim>0&&st.tot-rc.amt*c<=-lim)h+=`<div style="color:var(--x);font-size:13px"><b>Bu tutar zarar limitini aşar.</b></div>`}
+ else h+=`<div class="mu sm">Açık seri yok. İlk birimi sen seç. Seçmezsen bu el bahis sayılmaz.</div>`;
+ h+=`<div class=cens style="flex-wrap:wrap">${BK.chips.map(u=>`<button class=cen style="min-width:52px" onclick="bkAdd(${u})"><b>${u}</b></button>`).join('')}<button class=cen style="min-width:64px" onclick="bkClear()">Temizle</button></div>`;
+ if(rc)h+=`<button class=cen style="width:100%;margin-top:6px;border-color:var(--ac)" onclick="bkApply()"><b>${rc.amt} koy</b></button>`;
+ h+=BK.pend?`<div style="margin-top:8px;font-size:13px">Seçili <b>${BK.pend}</b> birim × ${c} sayı = <b>${BK.pend*c}</b> · tutarsa <b style="color:var(--ok)">${bkFm((36-c)*BK.pend)}</b> · tutmazsa <b style="color:var(--x)">${bkFm(-c*BK.pend)}</b></div>`:`<div class="mu sm" style="margin-top:8px">Seçili yok, bu el bahis sayılmaz.</div>`;
+ h+=`<div class="mu sm" style="margin-top:6px;text-align:right"><a onclick="bkChipsSet()" style="text-decoration:underline">Birimleri ayarla (${BK.chips.join('-')})</a></div></div>`;
+ return h}
+function bkMore(){
+ const z=bkZone(),st=bkState(),lim=BK.lim,c=z?z.c:21,base=BK.chips.includes(BK.base)?BK.base:BK.chips[0],rows=bkTable(base,c),lg=BK.log.slice(-10).reverse();
+ let h=`<details class=card ${bkOpen?'open':''} ontoggle="bkOpen=this.open"><summary><b>Kazan tablosu ve kayıt</b> <span class="mu sm">· net ${bkFm(st.tot)} · ${st.n} bahis</span></summary>`;
+ h+=`<div style="font-size:22px;font-weight:700;margin-top:8px;color:${bkCl(st.tot)}">${bkFm(st.tot)} <span class="mu sm">birim</span></div>
+ <div class="mu sm">Tutan ${st.hits}${st.n?` (%${Math.round(st.hits/st.n*100)})`:''} · kapanan seri ${st.closed} · en derin düşüş −${st.mdd} · yatırılan toplam ${st.stk}</div>
+ <div class="mu sm" style="margin-top:8px">Zarar limiti (birim)</div><div class=cens style="flex-wrap:wrap">${KL.map(v=>`<button class="cen ${lim===v?'on':''}" style="min-width:52px" onclick="bkLim(${v})">${v||'Kapalı'}</button>`).join('')}</div>
+ <div class="mu sm" style="margin-top:12px"><b>Tablo</b> · ilk birim (${c} sayı, hedef +${(36-c)*base})</div><div class=cens style="flex-wrap:wrap">${BK.chips.map(u=>`<button class="cen ${base===u?'on':''}" style="min-width:52px" onclick="bkBase(${u})">${u}</button>`).join('')}</div>
+ <div style="overflow-x:auto;margin-top:8px"><table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right"><tr class=mu><th style="text-align:left">El</th><th>Birim</th><th>Yatırım</th><th>Tutarsa net</th><th>Gelme</th></tr>${rows.map(r=>`<tr style="border-top:1px solid var(--bd);${lim>0&&r.loss>lim?'color:var(--x);':''}"><td style="text-align:left">${r.k}</td><td><b>${r.u}</b><div class="mu" style="font-size:10px">${bkTxt(r.parts)}</div></td><td>${r.st}</td><td>${bkFm(r.win)}</td><td>%${(r.p*100).toFixed(1)}</td></tr>`).join('')}</table></div>
+ <div class="mu sm" style="margin-top:6px">Birimler gereken tutarın üstüne, seçili birimlerle yapılabilen en yakın tutara yuvarlanır. ${lim>0?'Kırmızı satırlar zarar limitini aşar. ':''}Bu tablo ihtimali değiştirmez, kaybı büyüterek kurtarmanın bedelini gösterir.</div>
+ <div class="mu sm" style="margin-top:12px"><b>Son bahisler</b></div>${lg.length?`<table style="width:100%;border-collapse:collapse;font-size:12px;text-align:right"><tr class=mu><th style="text-align:left">El</th><th>Sayı</th><th>Birim</th><th>Sonuç</th><th>Net</th></tr>${lg.map(e=>`<tr style="border-top:1px solid var(--bd)"><td style="text-align:left">${e.i+1}</td><td>${e.x}→${e.v}</td><td>${e.u}</td><td>${e.h?'✔':'✖'}</td><td style="color:${bkCl(e.n)}">${bkFm(e.n)}</td></tr>`).join('')}</table>`:'<div class="mu sm">Henüz bahis yok.</div>'}${st.n?`<button class=cen style="width:100%;margin-top:10px" onclick="bkReset()">Bahis kaydını sıfırla</button>`:''}</details>`;
+ return h}
 function draw(){
- document.getElementById('v').innerHTML=[home,tOB,t2,t3,t4,tOl,tPlus,tBacktest][tab]();
+ document.getElementById('v').innerHTML=[home,tOB,tGap,tAn][tab]();
  const nv=document.getElementById('nav');
  nv.innerHTML=[
    ['🎯','Ana'],
    ['🔁','Önce/Sonra'],
-   ['📊','Dış Bahis'],
-   ['🔢','Son Rakam'],
-   ['➖','Çizgi'],
-   ['🧮','Olasılık'],
-   ['✨','Plus'],
-   ['🔬','Backtest']
+   ['📊','Gap'],
+   ['🔬','Analiz']
  ].map((x,i)=>`<button class="${tab==i?'on':''}" onclick="tab=${i};draw();scrollTo(0,0)"><i>${x[0]}</i>${x[1]}</button>`).join('');
  document.documentElement.style.setProperty('--nh',nv.offsetHeight+'px');
  document.getElementById('pw').innerHTML=panel();
+ document.documentElement.style.setProperty('--ph',(document.getElementById('pnl').offsetHeight)+'px');
  document.getElementById('ov').innerHTML=hist?overlay():''}
 
 draw();
