@@ -53,7 +53,6 @@ nav button{flex:1;border:0;background:none;padding:9px 2px 8px;font-size:11px;co
 nav button i{display:block;font-style:normal;font-size:20px}nav .on{color:var(--ac);font-weight:700}
 #toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 14px;border-radius:10px;opacity:0;transition:.2s;pointer-events:none;z-index:40}
 #toast.on{opacity:1}
-
 .strip{flex:1;display:flex;gap:3px;flex-wrap:nowrap;min-width:0}.strip .chip{flex:1;min-width:0;height:28px;font-size:12px;padding:0}
 .b{box-shadow:inset 0 0 0 1px #4a5a52}
 .cens{display:flex;gap:8px;margin-top:6px}.cen{flex:1;display:flex;align-items:center;gap:6px;justify-content:center;background:var(--n);border:2px solid transparent;border-radius:12px;padding:6px 4px}.cen.on{border-color:var(--ac)}
@@ -70,6 +69,13 @@ textarea{width:100%;height:84px;background:var(--bg);color:var(--tx);border:1px 
 .hit{box-shadow:0 3px 0 0 #f5c542}.b.hit{box-shadow:inset 0 0 0 1px #4a5a52,0 3px 0 0 #f5c542}.strip{padding-bottom:3px}.hi .ball{margin-bottom:3px}
 .ob{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid var(--bd)}.ob:first-of-type{border-top:0}.ob .chip{height:28px;min-width:36px;font-size:14px}.chip.e{background:var(--n);color:var(--mu)}.ar{color:var(--mu)}.fl{display:flex;flex-wrap:wrap;gap:8px}.fi{display:flex;align-items:center;gap:6px;background:var(--n);border-radius:10px;padding:4px 8px}nav button{font-size:10.5px!important}
 .rt{text-align:right;font-size:12px;margin-top:6px;color:var(--mu)}
+.bg2.ok{background:var(--ok)}.bg2.n{background:#6f8078}nav button{padding:9px 0 8px!important;min-width:0}
+.warn{background:var(--y);color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;margin:8px 0}
+.good{background:var(--ok);color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;margin:8px 0}
+.bad{background:var(--x);color:#fff;padding:8px 12px;border-radius:10px;font-size:13px;margin:8px 0}
+.big{font-size:22px;font-weight:700;line-height:1.2}
+.bar{display:flex;height:26px;border-radius:8px;overflow:hidden;background:var(--n);margin-top:4px;font-size:11px;color:#fff;font-weight:600}
+.bar>div{display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;white-space:nowrap}
 </style></head><body>
 <main id="v"></main><nav id="nav"></nav><div id="toast"></div><div id="ov"></div><div id="pw"></div>
 <script>
@@ -165,6 +171,511 @@ function tOB(){
  <div class="mu sm" style="margin:12px 0 4px">Son rakama göre (en az 2)</div>
  ${grp.length?grp.map(([d,c])=>`<div class=al><span><b>${nm[d]}</b> <span class="mu sm">${Object.keys(cn).filter(v=>v%10==d).map(v=>v+(cn[v]>1?'×'+cn[v]:'')).join(' ')}</span></span><span class="bg2 o">${c} kez</span></div>`).join(''):'<div class="mu sm">Henüz yok.</div>'}</div>
  <div class="mu" style="font-size:11px;text-align:center;padding:4px 0 12px">Toplam ${L} elde ${occ.length} kere ${X} geldi.</div>`}
+function erf(x){const s=Math.sign(x);x=Math.abs(x);const t=1/(1+.3275911*x);return s*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-x*x))}
+const zt=(h,n,p)=>n?(h-n*p)/Math.sqrt(n*p*(1-p)):0,pv=z=>2*(1-.5*(1+erf(Math.abs(z)/Math.SQRT2)));
+const rc=(pos,r)=>{let o='';for(let k=-r;k<=r;k++){const n=W[(pos+k+37)%37];o+=`<span class="chip ${col(n)}${k?'':' c'}">${n}</span>`}return o};
+const inWin=(j,x,r)=>Math.min((x-j+37)%37,(j-x+37)%37)<=r;
+function bestWin(c,r){let bj=0,bs=-1;for(let j=0;j<37;j++){let s=0;for(let k=-r;k<=r;k++)s+=c[(j+k+37)%37];if(s>bs){bs=s;bj=j}}return bj}
+function mdl(){const lam=Math.pow(.5,1/150),c=Array(37).fill(0);let T=0;
+ return{add(v){for(let j=0;j<37;j++)c[j]*=lam;T=T*lam+1;c[P[v]]++},
+ q(){const K=[1,2,3,2,1],q=[];for(let j=0;j<37;j++){let s=0;for(let k=-2;k<=2;k++)s+=K[k+2]/9*c[(j+k+37)%37];q.push((s+30/37)/(T+30))}return q}}}
+function win2(q){const Wm=[];for(let j=0;j<37;j++){let s=0;for(let k=-4;k<=4;k++)s+=q[(j+k+37)%37];Wm.push(s)}
+ let a=0;for(let j=1;j<37;j++)if(Wm[j]>Wm[a])a=j;
+ let b=-1;for(let j=0;j<37;j++){if(Math.min((j-a+37)%37,(a-j+37)%37)>=9&&(b<0||Wm[j]>Wm[b]))b=j}
+ return[[a,Wm[a]],[b,Wm[b]]]}
+function wf(){const M=mdl(),r=[];let loss=0;
+ for(let i=0;i<S.length;i++){if(i>=30){const q=M.q(),[A,B]=win2(q);r.push(inWin(A[0],P[S[i]],4)||inWin(B[0],P[S[i]],4));loss-=Math.log(q[P[S[i]]])}M.add(S[i])}
+ return{r,loss,M}}
+function srow(t,h,n){return `<div class=al><span><b>${t}</b><br><span class="mu sm">Bildi ${h} · Bilemedi ${n-h} · ${n} el</span></span><span class="bg2 n">%${(h/n*100).toFixed(1)}</span></div>`}
+function tOl(){
+ const L=S.length,top='<div class=top><b>Olasılık</b></div>';
+ if(L<31)return top+'<div class="card mu">Bu sayfa için en az 31 el gerekir ('+L+' el var).</div>';
+ const R=wf(),q=R.M.q(),[A,B]=win2(q),pa=A[1],pb=B[1];
+ const mc=(w,t)=>`<div class=card><h3>${t}. merkez (4+merkez+4 = 9 sayı)</h3><div class=last><i class="ball ${col(W[w[0]])}">${W[w[0]]}</i><div class=gr><div class=chips>${rc(w[0],4)}</div><div class="mu sm">olasılık %${(w[1]*100).toFixed(1)} · bölge çarkın %24,3'ü</div></div></div></div>`;
+ const n=R.r.length,h=R.r.filter(Boolean).length,p0=18/37,r100=R.r.slice(-100);
+ return top+`<div class=card><h3>Geçmiş eğilime göre 2 merkez</h3><div class=sm>18 sayı toplam olasılık: <b>%${((pa+pb)*100).toFixed(1)}</b> <span class=mu>(18 sayı çarkın %48,6'sı)</span></div><div class="mu sm">Son ~150 eli öne çıkaran, komşu cepleri yumuşatan ve az veriyi uniform'a çeken hesap.</div></div>`+mc(A,1)+mc(B,2)
+ +`<div class=card><h3>Sağlama (walk-forward)</h3><div class="mu sm" style="margin-bottom:4px">Her el için tahmin sadece o ele kadarki veriyle üretildi.</div>${srow('Tüm eller',h,n,p0)}${r100.length>=50&&n>100?srow('Son 100 el',r100.filter(Boolean).length,r100.length,p0):''}</div>`}
+function persist(v,r){const n=v.length;if(n<100)return null;const m=n>>1,c=Array(37).fill(0);
+ for(let i=0;i<m;i++)c[v[i]]++;const j=bestWin(c,r),n2=n-m;let k=0;for(let i=m;i<n;i++)if(inWin(j,v[i],r))k++;
+ const p=(2*r+1)/37,all=Array(37).fill(0);v.forEach(x=>all[x]++);return{z:zt(k,n2,p),share:k/n2,p,full:bestWin(all,r)}}
+function tour(){
+ const L=S.length,from=Math.max(30,L-600),K=7;
+ const wn=(p,r)=>{const o=[];for(let k=-r;k<=r;k++)o.push(W[(p+k+37)%37]);return o};
+ const nm=['Olasılık (2×9 sayı)','Sonraki Bölgeler (3×7)','Geniş Sonraki (3×7)','Sıcak 18 sayı (son 100 el)','Soğuk 18 sayı (en uzun gelmeyen)','Son sayının bölgesi (9 sayı)','Atış imzası (7 sayı)'];
+ const ac=nm.map(()=>({h:0,n:0,e:0})),M=mdl(),dc=Array(37).fill(0),last=Array(37).fill(-1);
+ const upd=i=>{M.add(S[i]);if(i>=1)dc[(P[S[i]]-P[S[i-1]]+37)%37]++;last[S[i]]=i};
+ for(let i=0;i<from;i++)upd(i);
+ for(let i=from;i<L;i++){
+  const v=S[i],pre=S.slice(0,i),X=S[i-1],st=[];
+  const[a,b]=win2(M.q());st.push(new Set([...wn(a[0],4),...wn(b[0],4)]));
+  for(const k of[1,2]){const t=top3(pre,X,3,k);st.push(t?new Set(t.t.flatMap(o=>[...R[3][o.c]])):null)}
+  const cnt=Array(37).fill(0);for(let j=Math.max(0,i-100);j<i;j++)cnt[S[j]]++;
+  const ids=[...Array(37).keys()];
+  st.push(new Set(ids.slice().sort((x,y)=>cnt[y]-cnt[x]||last[y]-last[x]).slice(0,18)));
+  st.push(new Set(ids.slice().sort((x,y)=>last[x]-last[y]).slice(0,18)));
+  st.push(new Set(wn(P[X],4)));
+  st.push(new Set(wn((P[X]+bestWin(dc,3))%37,3)));
+  st.forEach((s,j)=>{if(s){ac[j].n++;if(s.has(v))ac[j].h++;ac[j].e+=s.size/37}});
+  upd(i)}
+ const r=ac.map((x,j)=>({name:nm[j],h:x.h,n:x.n,p0:x.n?x.e/x.n:0,z:x.n?zt(x.h,x.n,x.e/x.n):0})).sort((x,y)=>y.z-x.z);
+ const b=r[0],n=b.n,d=((b.h/n-b.p0)*100).toFixed(1);
+ const msg=`En iyi sonuç veren yöntem: <b>${b.name}</b> (son ${n} elde %${(b.h/n*100).toFixed(1)} tuttu, kapsadığı alan %${(b.p0*100).toFixed(0)}).`;
+ return{r,msg,K}}
+function pred(){
+ const L=S.length;if(L<40)return null;
+ const M=mdl(),nc=Array.from({length:37},()=>Array(37).fill(0)),nn=Array(37).fill(0),dc=Array(37).fill(0);let dn=0;
+ const Kk=[1,2,3,2,1],sm=(a,j)=>{let s=0;for(let k=-2;k<=2;k++)s+=Kk[k+2]/9*a[(j+k+37)%37];return s};
+ const comps=X=>{const g=M.q(),u=Array(37).fill(1/37),c=[],d=[];
+  for(let j=0;j<37;j++){c.push((sm(nc[X],j)+15/37)/(nn[X]+15));d.push((sm(dc,(j-P[X]+37)%37)+30/37)/(dn+30))}
+  return[u,g,c,d]};
+ const win=(q,r)=>{let bj=0,bs=-1;for(let j=0;j<37;j++){let s=0;for(let k=-r;k<=r;k++)s+=q[(j+k+37)%37];if(s>bs){bs=s;bj=j}}return[bj,bs]};
+ const wts=l=>{const m=Math.max(...l),e=l.map(x=>Math.exp(x-m)),s=e.reduce((a,b)=>a+b);return e.map(x=>x/s)};
+ const mix=(cs,w)=>cs[0].map((_,j)=>cs.reduce((a,c,k)=>a+w[k]*c[j],0));
+ let ll=[0,0,0,0],h7=0,h9=0,h7b=0,h9b=0,n=0;
+ const upd=i=>{const p=P[S[i]];M.add(S[i]);if(i>=1){const X=S[i-1];nc[X][p]++;nn[X]++;dc[(p-P[X]+37)%37]++;dn++}};
+ for(let i=0;i<L;i++){
+  if(i>=30){const cs=comps(S[i-1]),q=mix(cs,wts(ll)),p=P[S[i]];
+   if(inWin(win(q,3)[0],p,3))h7++;if(inWin(win(q,4)[0],p,4))h9++;n++;
+   const q2=mix(cs.slice(1),wts(ll.slice(1)));if(inWin(win(q2,3)[0],p,3))h7b++;if(inWin(win(q2,4)[0],p,4))h9b++;
+   cs.forEach((c,k)=>ll[k]+=Math.log(c[p]))}
+  upd(i)}
+ const w=wts(ll),cs=comps(S[L-1]),weak=w[0]>=.9,q=weak?mix(cs.slice(1),wts(ll.slice(1))):mix(cs,w),a=win(q,3),b=win(q,4);
+ const top=[...Array(37).keys()].sort((x,y)=>q[y]-q[x]).slice(0,3);
+ return{w,q,a,b,top,h7:weak?h7b:h7,h9:weak?h9b:h9,n,weak}}
+function predCard(){
+ const R=pred();if(!R)return '';
+ const nm=['Dengeli','Genel eğilim','Sonraki sayıya göre','Atış imzası'],pc=x=>(x*100).toFixed(1),pr=(h,n)=>`Bildi ${h} · Bilemedi ${n-h} · <b>%${(h/n*100).toFixed(1)}</b>`;
+ return `<div class=card><h3>Plus Tahmin (sonraki el)</h3><div class="mu sm">${S[S.length-1]} geldikten sonra, 4 modelin karışımı. Ağırlıklar geçmişte hangisi daha iyi tuttuysa ona göre.</div>${R.weak?'<div class="mu sm" style="margin-top:6px">Modeller şu an birbirinden belirgin ayrışmıyor, seçim en iyi eğilim modeline göre yapıldı.</div>':''}
+ <div style="margin-top:10px"><b class=sm>En olası merkez, 3+merkez+3 (7 sayı)</b><div class=last style="margin-top:4px"><i class="ball ${col(W[R.a[0]])}">${W[R.a[0]]}</i><div class=gr><div class=chips>${rc(R.a[0],3)}</div><div class="mu sm">model olasılığı %${pc(R.a[1])}</div></div></div></div>
+ <div style="margin-top:10px"><b class=sm>En olası merkez, 4+merkez+4 (9 sayı)</b><div class=last style="margin-top:4px"><i class="ball ${col(W[R.b[0]])}">${W[R.b[0]]}</i><div class=gr><div class=chips>${rc(R.b[0],4)}</div><div class="mu sm">model olasılığı %${pc(R.b[1])}</div></div></div></div>
+ <div style="margin-top:10px"><b class=sm>En olası 3 sayı</b><div class=fl style="margin-top:4px">${R.top.map(p=>`<div class=fi><span class="chip ${col(W[p])}">${W[p]}</span><span class=sm>%${pc(R.q[p])}</span></div>`).join('')}</div></div>
+ <div class="mu sm" style="margin-top:10px">Model ağırlıkları: ${nm.map((x,k)=>x+' %'+Math.round(R.w[k]*100)).join(' · ')}</div>
+ <div class=al style="margin-top:8px"><span><b>Sağlama: bu sistemin son ${R.n} elde gerçek oranı</b><br><span class="mu sm">7'li bölge: ${pr(R.h7,R.n)}<br>9'lu bölge: ${pr(R.h9,R.n)}</span></span></div>
+ <div class="mu sm" style="margin-top:8px">Not: 7 sayılık bölge çarkın %18,9'unu, 9 sayılık bölge %24,3'ünü kapsar.</div></div>`}
+function labRun(seq){
+ const L=seq.length,pp=seq.map(v=>P[v]),I0=60,Hs=[25,50,100,200,400,0],Rs=[0,1,2,3],sp=[];
+ Hs.forEach(h=>Rs.forEach(r=>sp.push({k:0,h,r,name:`Sıcak bölge (son ${h||'tüm'} el, komşu ±${r})`})));
+ Rs.forEach(r=>sp.push({k:1,r,name:`Son sayıdan sonra gelenler (komşu ±${r})`}));
+ [0,150].forEach(h=>[1,2,3].forEach(r=>sp.push({k:2,h,r,name:`Atış imzası (${h?'son '+h:'tüm'} el, ±${r})`})));
+ sp.push({k:3,name:'En uzun gelmeyen 18 sayı'},{k:4,f:0,name:'Son sayının çevresi (18)'},{k:4,f:18,name:'Son sayının karşı yüzü (18)'});
+ const lam=Hs.map(h=>h?Math.pow(.5,1/h):1),ca=Hs.map(()=>Array(37).fill(0)),nc=Array.from({length:37},()=>Array(37).fill(0)),dc=[0,1].map(()=>Array(37).fill(0)),dl=[1,Math.pow(.5,1/150)],last=Array(37).fill(-1);
+ const sm=(a,j,r)=>{if(!r)return a[j];let s=0,t=0;for(let k=-r;k<=r;k++){const w=r+1-Math.abs(k);s+=w*a[(j+k+37)%37];t+=w}return s/t};
+ const score=(s,x,i)=>{const o=new Array(37);
+  if(s.k===0){const a=ca[Hs.indexOf(s.h)];for(let j=0;j<37;j++)o[j]=sm(a,j,s.r)}
+  else if(s.k===1){const a=nc[x];for(let j=0;j<37;j++)o[j]=sm(a,j,s.r)}
+  else if(s.k===2){const a=dc[s.h?1:0];for(let j=0;j<37;j++)o[j]=sm(a,(j-x+37)%37,s.r)}
+  else if(s.k===3){for(let j=0;j<37;j++)o[j]=last[W[j]]<0?1e6:i-last[W[j]]}
+  else{const t=(x+s.f)%37;for(let j=0;j<37;j++)o[j]=-Math.min((j-t+37)%37,(t-j+37)%37)}
+  return o};
+ const H=sp.map(()=>new Uint8Array(L));
+ for(let i=0;i<L;i++){
+  if(i>=I0){const x=pp[i-1],t=pp[i];sp.forEach((s,m)=>{const o=score(s,x,i);let rk=0;for(let j=0;j<37;j++)if(o[j]>o[t]||(o[j]===o[t]&&j<t))rk++;H[m][i]=rk<18?1:0})}
+  Hs.forEach((h,q)=>{const a=ca[q];if(lam[q]<1)for(let j=0;j<37;j++)a[j]*=lam[q];a[pp[i]]++});
+  if(i>=1){nc[pp[i-1]][pp[i]]++;const d=(pp[i]-pp[i-1]+37)%37;[0,1].forEach(q=>{if(dl[q]<1)for(let j=0;j<37;j++)dc[q][j]*=dl[q];dc[q][d]++})}
+  last[seq[i]]=i}
+ const n=Math.max(0,L-I0),tot=H.map(a=>{let s=0;for(let i=I0;i<L;i++)s+=a[i];return s});
+ const WN=200,cs=H.map(a=>{const c=new Int32Array(L+1);for(let i=0;i<L;i++)c[i+1]=c[i]+a[i];return c});
+ let ah=0,an=0;for(let i=I0+100;i<L;i++){let bm=0,bv=-1;for(let m=0;m<sp.length;m++){const v=cs[m][i]-cs[m][Math.max(I0,i-WN)];if(v>bv){bv=v;bm=m}}ah+=H[bm][i];an++}
+ let cm=0,cv=-1;for(let m=0;m<sp.length;m++){const v=cs[m][L]-cs[m][Math.max(I0,L-WN)];if(v>cv){cv=v;cm=m}}
+ const nx=m=>score(sp[m],pp[L-1],L);
+ return{sp,tot,n,ah,an,cm,nx,H,I0,L}}
+function lab(){
+ if(S.length<160)return null;
+ const R=labRun(S),rk=R.sp.map((s,m)=>({name:s.name,h:R.tot[m],n:R.n,m})).sort((a,b)=>b.h-a.h);
+ const o=R.nx(R.cm),idx=[...Array(37).keys()].sort((a,b)=>o[b]-o[a]||a-b),set=idx.slice(0,18);
+ return{R,rk,best:rk[0],ad:{h:R.ah,n:R.an},cur:R.sp[R.cm].name,top3:idx.slice(0,3).map(j=>W[j]),set:set.slice().sort((a,b)=>a-b).map(j=>W[j])}}
+function labCard(){
+ if(S.length<160)return `<div class=card><h3>Plus Lab (18 sayılık tahmin)</h3><div class="mu sm">En az 160 el gerekir (${S.length} el var).</div></div>`;
+ const Z=lab(),pr=(h,n)=>`Bildi ${h} · Bilemedi ${n-h} · <b>%${(h/n*100).toFixed(1)}</b>`;
+ return `<div class=card><h3>Plus Lab (18 sayılık tahmin)</h3><div class="mu sm">${Z.rk.length} yöntem denendi. Her yöntem her el 18 sayı seçer (çarkın %48,6'sı), her el sadece öncesindeki veriyle sınandı.</div>
+ <div class=al style="margin-top:8px"><span><b>Geçmişte en çok tutan yöntem</b><br><span class="mu sm">${Z.best.name}</span><br><span class="mu sm">${pr(Z.best.h,Z.best.n)}</span></span></div>
+ <div class=al><span><b>Kendi kendini seçen sistem</b><br><span class="mu sm">Her el, o ana kadar son 200 elde en iyi giden yöntemi seçti. Seçim geleceğe bakmadığı için bu oran gerçek tutma oranıdır.</span><br><span class="mu sm">${pr(Z.ad.h,Z.ad.n)}</span></span></div>
+ <div style="margin-top:10px"><b class=sm>Şu an seçilen yöntem: ${Z.cur}</b><div class="mu sm" style="margin:4px 0">Sonraki el için 18 sayı (çark sırasıyla)</div><div class=chips>${Z.set.map(n=>`<span class="chip ${col(n)}${Z.top3.includes(n)?' c':''}">${n}</span>`).join('')}</div><div class="mu sm" style="margin-top:4px">Çerçeveli 3 sayı yöntemin en güçlü seçimi.</div></div>
+ <div class="mu sm" style="margin:10px 0 4px">En iyi 5 yöntem</div>${Z.rk.slice(0,5).map(x=>`<div class=al><span class=sm>${x.name}</span><span class="bg2 n">%${(x.h/x.n*100).toFixed(1)}</span></div>`).join('')}</div>`}
+function tPlus(){
+ const L=S.length,top='<div class=top><b>Plus</b></div>';
+ if(L<31)return top+'<div class="card mu">Plus için en az 31 el gerekir ('+L+' el var).</div>';
+ const pos=S.map(v=>P[v]),ds=[];for(let i=1;i<L;i++)ds.push((pos[i]-pos[i-1]+37)%37);
+ const s1=persist(pos,4),s2=persist(ds,3),sig=[],card=[];
+ const bd=(ok,t)=>`<span class="bg2 ${ok===null?'n':ok?'ok':'x'}">${t}</span>`;
+ if(!s1)card.push(`<div class=al><span><b>Çark bölgesi kalıcı mı?</b><br><span class="mu sm">En az 100 el gerekir.</span></span>${bd(null,'Veri az')}</div>`);
+ else{const ok=s1.z>=2;if(ok)sig.push(rc(s1.full,4));card.push(`<div class=al><span><b>Çark bölgesi kalıcı mı?</b><br><span class="mu sm">İlk yarının en sıcak 9 sayılık bölgesi ikinci yarıda %${(s1.share*100).toFixed(0)} geldi (bölge çarkın %${(s1.p*100).toFixed(0)}'ü). Gerçek bir çark eğimi böyle kalıcı olur.</span>${ok?`<br><div class=chips style="margin-top:4px">${rc(s1.full,4)}</div>`:''}</span>${bd(ok,ok?'Var':'Yok')}</div>`)}
+ if(!s2)card.push(`<div class=al><span><b>Atış imzası</b><br><span class="mu sm">En az 100 el gerekir.</span></span>${bd(null,'Veri az')}</div>`);
+ else{const ok=s2.z>=2,tp=(P[S[L-1]]+s2.full)%37;if(ok)sig.push(rc(tp,3));card.push(`<div class=al><span><b>Atış imzası</b><br><span class="mu sm">Ardışık sayılar arasında çarkta +${s2.full} cep (±3) civarı ikinci yarıda %${(s2.share*100).toFixed(0)} görüldü (bölge çarkın %${(s2.p*100).toFixed(0)}'ü). Krupiye hep benzer atıyorsa çıkar.</span>${ok?`<br><span class="sm">Son sayıdan hedef:</span><div class=chips style="margin-top:4px">${rc(tp,3)}</div>`:''}</span>${bd(ok,ok?'Var':'Yok')}</div>`)}
+ const T=tour(),reg=`<div class=card><h3>Hangi yöntem daha çok tuttu?</h3><div class="mu sm" style="margin-bottom:4px">Son ${T.r[0].n} elde ${T.K} yöntem, her el sadece öncesindeki veriyle sınandı. Bildi/bilemedi sayıları ve yöntemin kapsadığı alan.</div>${T.r.map(x=>`<div class=al><span><b>${x.name}</b><br><span class="mu sm">Bildi ${x.h} · Bilemedi ${x.n-x.h} · ${x.n} el · kapsadığı alan %${(x.p0*100).toFixed(0)}</span></span><span class="bg2 n">%${(x.h/x.n*100).toFixed(1)}</span></div>`).join('')}</div>`;
+ const dv=L<200?['Veri az','200+ el iyi, 500+ güvenilir',null]:L<500?['Sınırlı','500+ el daha güvenilir',null]:['Yeterli','Sinyal testleri anlamlı çalışır',true];
+ const sum=sig.length?`<div class=sm>Şu an geçerli sinyal var. Birlikte dikkate alınacak sayılar:</div>${sig.map(x=>`<div class=chips style="margin-top:6px">${x}</div>`).join('')}<div class="mu sm" style="margin-top:8px">Sinyal garanti değil, az veriyle yanılabilir. Bahis başına beklenen kayıp yine de ≈ %2,7.</div>`:`<div class=sm>Şu an güçlü bir sinyal görünmüyor.</div>`;
+ return top+labCard()+predCard()+`<div class=card><h3>Plus özeti</h3>${sum}<div class="mu sm" style="margin-top:8px">${T.msg}</div></div><div class=card><h3>Bakılacak sinyaller</h3>${card.join('')}<div class=al><span><b>Veri yeterliliği</b><br><span class="mu sm">${L} el · ${dv[1]}</span></span>${bd(dv[2],dv[0])}</div></div>`+reg+'<div class="mu sm" style="padding:4px 2px 12px">Oranlar sistemin geçmişteki gerçek tutma oranıdır, gelecek eli garanti etmez. Bahis başına beklenen kayıp ≈ %2,7.</div>'}
+
+// ============================================================
+// YENİ: BACKTEST SEKMESİ ("Ne yapsaydık?")
+// ============================================================
+
+// Strateji kütüphanesi - her biri, "şu ana kadarki veriyle sonraki eli tahmin et"
+const BT_STRATS = [
+  {name:'Sıcak-30 (6 sayı)', fn:(arr,u)=>{
+    if(u<30)return null;
+    const cnt=Array(37).fill(0);
+    for(let i=u-30;i<u;i++)cnt[arr[i]]++;
+    const top=[...Array(37).keys()].sort((a,b)=>cnt[b]-cnt[a]).slice(0,6);
+    return {nums:top, exp:6/37};
+  }},
+  {name:'Sıcak-50 (9 sayı)', fn:(arr,u)=>{
+    if(u<50)return null;
+    const cnt=Array(37).fill(0);
+    for(let i=u-50;i<u;i++)cnt[arr[i]]++;
+    const top=[...Array(37).keys()].sort((a,b)=>cnt[b]-cnt[a]).slice(0,9);
+    return {nums:top, exp:9/37};
+  }},
+  {name:'Sıcak-100 (9 sayı)', fn:(arr,u)=>{
+    if(u<100)return null;
+    const cnt=Array(37).fill(0);
+    for(let i=u-100;i<u;i++)cnt[arr[i]]++;
+    const top=[...Array(37).keys()].sort((a,b)=>cnt[b]-cnt[a]).slice(0,9);
+    return {nums:top, exp:9/37};
+  }},
+  {name:'Sıcak-200 (9 sayı)', fn:(arr,u)=>{
+    if(u<200)return null;
+    const cnt=Array(37).fill(0);
+    for(let i=u-200;i<u;i++)cnt[arr[i]]++;
+    const top=[...Array(37).keys()].sort((a,b)=>cnt[b]-cnt[a]).slice(0,9);
+    return {nums:top, exp:9/37};
+  }},
+  {name:'Sıcak Tüm (9 sayı)', fn:(arr,u)=>{
+    if(u<100)return null;
+    const cnt=Array(37).fill(0);
+    for(let i=0;i<u;i++)cnt[arr[i]]++;
+    const top=[...Array(37).keys()].sort((a,b)=>cnt[b]-cnt[a]).slice(0,9);
+    return {nums:top, exp:9/37};
+  }},
+  {name:'Soğuk-9 (en uzun gelmeyen)', fn:(arr,u)=>{
+    if(u<30)return null;
+    const last=Array(37).fill(-1);
+    for(let i=0;i<u;i++)last[arr[i]]=i;
+    const top=[...Array(37).keys()].sort((a,b)=>{
+      const la=last[a]<0?-1:last[a], lb=last[b]<0?-1:last[b];
+      return la-lb;
+    }).slice(0,9);
+    return {nums:top, exp:9/37};
+  }},
+  {name:'Komşu ±4 (9 sayı)', fn:(arr,u)=>{
+    if(u<1)return null;
+    const c=P[arr[u-1]],nums=[];
+    for(let k=-4;k<=4;k++)nums.push(W[(c+k+37)%37]);
+    return {nums, exp:9/37};
+  }},
+  {name:'Sıcak Bölge-9 (çarkta)', fn:(arr,u)=>{
+    if(u<50)return null;
+    const cnt=Array(37).fill(0);
+    for(let i=Math.max(0,u-50);i<u;i++)cnt[P[arr[i]]]++;
+    let bj=0,bs=-1;
+    for(let j=0;j<37;j++){
+      let s=0;for(let k=-4;k<=4;k++)s+=cnt[(j+k+37)%37];
+      if(s>bs){bs=s;bj=j}
+    }
+    const nums=[];
+    for(let k=-4;k<=4;k++)nums.push(W[(bj+k+37)%37]);
+    return {nums, exp:9/37};
+  }},
+  {name:'Düzine Gap', fn:(arr,u)=>{
+    if(u<10)return null;
+    const dz=[
+      {name:'1. düzine',set:new Set(rng(1,12))},
+      {name:'2. düzine',set:new Set(rng(13,24))},
+      {name:'3. düzine',set:new Set(rng(25,36))}
+    ];
+    let best=null,bg=0;
+    for(const g of dz){
+      let gap=0;
+      for(let j=u-1;j>=0;j--){if(g.set.has(arr[j]))break;gap++}
+      if(gap>bg){bg=gap;best=g}
+    }
+    return {nums:[...best.set], exp:12/37, group:best.name, gap:bg};
+  }},
+  {name:'Kolon Gap', fn:(arr,u)=>{
+    if(u<10)return null;
+    const kc=[
+      {name:'1. kolon',set:new Set(rng(1,36).filter(n=>n%3===1))},
+      {name:'2. kolon',set:new Set(rng(1,36).filter(n=>n%3===2))},
+      {name:'3. kolon',set:new Set(rng(1,36).filter(n=>n%3===0))}
+    ];
+    let best=null,bg=0;
+    for(const g of kc){
+      let gap=0;
+      for(let j=u-1;j>=0;j--){if(g.set.has(arr[j]))break;gap++}
+      if(gap>bg){bg=gap;best=g}
+    }
+    return {nums:[...best.set], exp:12/37, group:best.name, gap:bg};
+  }},
+  {name:'Renk Gap', fn:(arr,u)=>{
+    if(u<10)return null;
+    const kr={name:'Kırmızı',set:RED};
+    const sy={name:'Siyah',set:new Set(rng(1,36).filter(n=>!RED.has(n)))};
+    let kg=0,sg=0;
+    for(let j=u-1;j>=0;j--){if(kr.set.has(arr[j]))break;kg++}
+    for(let j=u-1;j>=0;j--){if(sy.set.has(arr[j]))break;sg++}
+    const g=kg>=sg?kr:sy;
+    return {nums:[...g.set], exp:18/37, group:g.name, gap:Math.max(kg,sg)};
+  }},
+  {name:'Tek/Çift Gap', fn:(arr,u)=>{
+    if(u<10)return null;
+    const tk={name:'Tek',set:new Set(rng(1,36).filter(n=>n%2))};
+    const cf={name:'Çift',set:new Set(rng(1,36).filter(n=>n%2===0))};
+    let tg=0,cg=0;
+    for(let j=u-1;j>=0;j--){if(tk.set.has(arr[j]))break;tg++}
+    for(let j=u-1;j>=0;j--){if(cf.set.has(arr[j]))break;cg++}
+    const g=tg>=cg?tk:cf;
+    return {nums:[...g.set], exp:18/37, group:g.name, gap:Math.max(tg,cg)};
+  }},
+  {name:'Atış İmzası ±4', fn:(arr,u)=>{
+    if(u<30)return null;
+    const dc=Array(37).fill(0);
+    for(let i=1;i<u;i++)dc[(P[arr[i]]-P[arr[i-1]]+37)%37]++;
+    let bj=0,bs=-1;
+    for(let j=0;j<37;j++){
+      let s=0;for(let k=-4;k<=4;k++)s+=dc[(j+k+37)%37];
+      if(s>bs){bs=s;bj=j}
+    }
+    const nums=[];
+    for(let k=-4;k<=4;k++)nums.push(W[(bj+k+37)%37]);
+    return {nums, exp:9/37, diff:bj};
+  }},
+  {name:'Markov (en sık 9)', fn:(arr,u)=>{
+    if(u<50)return null;
+    const X=arr[u-1];
+    const cnt=Array(37).fill(0);let n=0;
+    for(let i=1;i<u;i++)if(arr[i-1]===X){cnt[arr[i]]++;n++}
+    if(n<3)return null;
+    const top=[...Array(37).keys()].sort((a,b)=>cnt[b]-cnt[a]).slice(0,9);
+    return {nums:top, exp:9/37, samples:n};
+  }},
+];
+
+function btRun(arr){
+  const L=arr.length;
+  if(L<40)return null;
+  const results=BT_STRATS.map(s=>({name:s.name,hits:0,trials:0,expSum:0,streak:0,maxStreak:0,lastNums:null}));
+  for(let i=40;i<L;i++){
+    const actual=arr[i];
+    BT_STRATS.forEach((s,si)=>{
+      const r=s.fn(arr,i);
+      if(!r)return;
+      const hit=r.nums.includes(actual);
+      const R=results[si];
+      R.trials++;R.expSum+=r.exp;
+      if(hit){R.hits++;R.streak++;if(R.streak>R.maxStreak)R.maxStreak=R.streak}
+      else R.streak=0;
+    });
+  }
+  return results.filter(r=>r.trials>20).map(r=>{
+    const actual=r.hits/r.trials, exp=r.expSum/r.trials;
+    const se=Math.sqrt(exp*(1-exp)/r.trials);
+    const z=(actual-exp)/se;
+    return {...r,actual,exp,z,lift:actual-exp};
+  }).sort((a,b)=>b.z-a.z);
+}
+
+function btSeries(arr){
+ const L=arr.length,from=Math.max(40,L-700),K=BT_STRATS.length;
+ const H=BT_STRATS.map(()=>new Int8Array(L).fill(-1)),E=BT_STRATS.map(()=>new Float32Array(L)),B=BT_STRATS.map(()=>new Uint8Array(L));
+ for(let i=from;i<L;i++)BT_STRATS.forEach((s,k)=>{const r=s.fn(arr,i);if(!r)return;H[k][i]=r.nums.includes(arr[i])?1:0;E[k][i]=r.exp;B[k][i]=r.nums.length});
+ return{H,E,B,from,K}}
+function btAdaptive(arr){
+ const L=arr.length,{H,E,B,from,K}=btSeries(arr),WN=150;
+ const lift=(k,a,b)=>{let s=0;for(let i=a;i<b;i++)if(H[k][i]>=0)s+=H[k][i]-E[k][i];return s};
+ let hits=0,n=0,exp=0,bank=0,bets=0;
+ for(let i=from+WN;i<L;i++){let bk=-1,bv=-1e9;for(let k=0;k<K;k++){if(H[k][i]<0)continue;const v=lift(k,i-WN,i);if(v>bv){bv=v;bk=k}}
+  if(bk<0)continue;n++;hits+=H[bk][i];exp+=E[bk][i];bets+=B[bk][i];bank+=-B[bk][i]+(H[bk][i]?36:0)}
+ let ck=0,cv=-1e9;for(let k=0;k<K;k++){const v=lift(k,Math.max(from,L-WN),L);if(v>cv){cv=v;ck=k}}
+ return{n,hits,exp:n?exp/n:0,bank,bets,cur:BT_STRATS[ck].name}}
+function btProfit(arr, stratName){
+  const strat=BT_STRATS.find(s=>s.name===stratName);
+  if(!strat)return null;
+  let bank=0,plays=0,wins=0,bets=0;
+  const equity=[];
+  for(let i=40;i<arr.length;i++){
+    const r=strat.fn(arr,i);
+    if(!r)continue;
+    const hit=r.nums.includes(arr[i]);
+    const bet=r.nums.length;
+    bank-=bet;bets+=bet;plays++;
+    if(hit){bank+=36;wins++}
+    equity.push(bank);
+  }
+  return {bank,plays,wins,bets,winRate:wins/plays,equity};
+}
+
+function btBestNow(arr){
+  const r=btRun(arr);
+  if(!r||!r.length)return null;
+  return r.find(x=>x.z>=1.0)||null;
+}
+
+function btGroupStats(arr){
+  // Kategori bazlı gerçek oran vs beklenen
+  const cats={
+    'Kırmızı':RED,
+    'Siyah':new Set(rng(1,36).filter(n=>!RED.has(n))),
+    'Tek':new Set(rng(1,36).filter(n=>n%2)),
+    'Çift':new Set(rng(1,36).filter(n=>n%2===0)),
+    '1-18':new Set(rng(1,18)),
+    '19-36':new Set(rng(19,36)),
+    '1. düzine':new Set(rng(1,12)),
+    '2. düzine':new Set(rng(13,24)),
+    '3. düzine':new Set(rng(25,36)),
+    '1. kolon':new Set(rng(1,36).filter(n=>n%3===1)),
+    '2. kolon':new Set(rng(1,36).filter(n=>n%3===2)),
+    '3. kolon':new Set(rng(1,36).filter(n=>n%3===0)),
+  };
+  const out=[];
+  for(const[name,set]of Object.entries(cats)){
+    const c=arr.filter(n=>set.has(n)).length;
+    const exp=arr.length*set.size/37;
+    const p=set.size/37;
+    const se=Math.sqrt(arr.length*p*(1-p));
+    const z=(c-exp)/se;
+    out.push({name,c,exp,actual:c/arr.length,expected:p,z});
+  }
+  return out.sort((a,b)=>b.z-a.z);
+}
+
+function btFreq(arr){
+  const f=Array(37).fill(0);
+  arr.forEach(n=>f[n]++);
+  const exp=arr.length/37;
+  return [...Array(37).keys()].map(n=>{
+    const se=Math.sqrt(arr.length*(1/37)*(36/37));
+    return {n,c:f[n],exp,z:(f[n]-exp)/se};
+  }).sort((a,b)=>b.z-a.z);
+}
+
+let btChart=0; // 0=tüm, 1=son 100
+
+function tBacktest(){
+  const L=S.length;
+  let h=`<div class=top><b>🔬 Backtest</b><span class="mu sm">${L} el</span></div>`;
+
+  // Veri girişi en üstte
+  h+=`<div class=card><h3>📥 Veri</h3>
+    <div class="mu sm" style="margin-bottom:6px">Sayıları virgül/boşlukla yapıştır (eskiden yeniye).</div>
+    <textarea id=bt-ta placeholder="1,14,12,22,17,28,..."></textarea>
+    <div class=acts2><button onclick=btImport(0)>Sona Ekle</button><button onclick=btImport(1)>Üzerine Yaz</button></div>
+    <div class=acts2><button onclick=btExport()>📋 Kopyala</button><button onclick="if(confirm('Tüm veri silinsin mi?')){S=[];save();draw()}">🗑️ Sil</button></div>
+    <div class="mu sm">Mevcut: <b>${L}</b> el</div>
+  </div>`;
+
+  if(L<40){
+    h+=`<div class="card mu">Backtest için en az 40 el gerekli.</div>`;
+    return h;
+  }
+
+  const results=btRun(S);
+  const best=results[0];
+
+  const AD=btAdaptive(S);
+  h+=`<div class=card><h3>🎯 Şu An Önerilen (kendi kendini seçen sistem)</h3>`;
+  if(AD.n>0){
+    const st2=BT_STRATS.find(x=>x.name===AD.cur),r=st2.fn(S,S.length);
+    h+=`<div class="mu sm" style="margin-bottom:6px">Her el, o ana kadar son 150 elde en iyi giden stratejiyi seçti (geleceğe bakmadan). Şimdi seçilen:</div><div class=good><b>${AD.cur}</b>${r&&r.group?'<br><span class=sm>'+r.group+(r.gap?' · '+r.gap+' eldir gelmiyor':'')+'</span>':''}</div>`;
+    if(r)h+=`<div class=chips style="margin-top:6px">${r.nums.map(n=>`<span class="chip ${col(n)}">${n}</span>`).join('')}</div>`;
+    h+=`<div class=al style="margin-top:8px"><span><b>Bu sistemin gerçek sonucu</b><br><span class="mu sm">Bildi ${AD.hits} · Bilemedi ${AD.n-AD.hits} · ${AD.n} el · kapsadığı alan %${(AD.exp*100).toFixed(1)}</span><br><span class="mu sm">Her elde seçilen sayılara 1'er birim: <b>${AD.bank>=0?'+':''}${AD.bank}</b> birim (${AD.bets} birim yatırım)</span></span><span class="bg2 n">%${(AD.hits/AD.n*100).toFixed(1)}</span></div>`;
+  }else h+=`<div class=warn>Seçim sisteminin çalışması için en az ~250 el gerekir.</div>`;
+  h+=`</div>`;
+  if(best){const sim=btProfit(S,best.name);
+   h+=`<div class=card><h3>📌 Geçmişte en iyi çıkan strateji (sonradan seçilmiş)</h3><div class=sm><b>${best.name}</b> · ${best.hits}/${best.trials} · %${(best.actual*100).toFixed(1)} (kapsadığı alan %${(best.exp*100).toFixed(1)})${sim?' · '+(sim.bank>=0?'+':'')+sim.bank+' birim':''}</div><div class="mu sm" style="margin-top:6px">Dikkat: ${BT_STRATS.length} strateji arasından geçmişe bakıp en iyisini seçtik. Bu oran gelecekte tekrarlanmayabilir, asıl ölçü yukarıdaki kendi kendini seçen sistemin sonucu.</div></div>`}
+
+  // 3. Tüm stratejiler
+  h+=`<div class=card><h3>📊 Tüm Stratejiler</h3>
+  <div class="mu sm" style="margin-bottom:6px">Her strateji her el, o ana kadarki veriyle sınandı. <b>z</b>: ${BT_STRATS.length} strateji denendiği için şansla da 2'nin üstü çıkabilir; ≥2,4 = sıkı eşikle anlamlı.</div>`;
+  results.forEach((r,i)=>{
+    const c=r.z>=2.4?'ok':r.z>=1?'y':r.z>=0?'n':'x';
+    h+=`<div class=al><span><b>${i+1}. ${r.name}</b><br>
+    <span class="mu sm">${r.hits}/${r.trials} · %${(r.actual*100).toFixed(1)} (bekl. %${(r.exp*100).toFixed(1)}) · lift ${r.lift>=0?'+':''}${(r.lift*100).toFixed(1)}pp · max seri ${r.maxStreak}</span></span>
+    <span class="bg2 ${c}">z=${r.z.toFixed(2)}</span></div>`;
+  });
+  h+=`</div>`;
+
+  // 4. Kategori bazlı gerçek vs beklenen
+  const cats=btGroupStats(S);
+  h+=`<div class=card><h3>🎲 Kategori Sapması (tüm veri)</h3>
+  <div class="mu sm" style="margin-bottom:6px">Hangi kategori normalden çok/az geliyor? z ≥ 2 ise anlamlı sapma.</div>`;
+  cats.forEach(c=>{
+    const cl=c.z>=2?'ok':c.z>=1?'y':c.z>=-1?'n':c.z>=-2?'o':'x';
+    h+=`<div class=al><span><b>${c.name}</b><br><span class="mu sm">${c.c}/${S.length} · %${(c.actual*100).toFixed(1)} (bekl. %${(c.expected*100).toFixed(1)})</span></span><span class="bg2 ${cl}">z=${c.z.toFixed(2)}</span></div>`;
+  });
+  h+=`</div>`;
+
+  // 5. Sayı bazlı frekans
+  const freq=btFreq(S);
+  h+=`<div class=card><h3>🔢 Sayı Frekansları</h3>
+  <div class="mu sm" style="margin-bottom:6px">Beklenen her sayı için: ${(S.length/37).toFixed(1)}</div>
+  <b class=sm>En sık gelenler (z ≥ 0.5):</b>`;
+  const hot=freq.filter(f=>f.z>=0.5).slice(0,10);
+  const cold=freq.filter(f=>f.z<=-0.5).slice(-10).reverse();
+  h+=`<div class=chips style="margin:6px 0">${hot.map(f=>`<span class="chip ${col(f.n)}" title="${f.c} kez">${f.n}·${f.c}</span>`).join('')}</div>`;
+  h+=`<b class=sm>En az gelenler (z ≤ -0.5):</b>`;
+  h+=`<div class=chips style="margin:6px 0">${cold.map(f=>`<span class="chip ${col(f.n)}" title="${f.c} kez">${f.n}·${f.c}</span>`).join('')}</div>`;
+  h+=`</div>`;
+
+  // 6. "Ne yapsaydık?" - son 15 el
+  h+=`<div class=card><h3>🔍 Son 15 El - "Ne Yapsaydık?"</h3>
+  <div class="mu sm" style="margin-bottom:6px">Her el için, o ana kadarki veriyle hangi stratejiler o sayıyı tuttu.</div>`;
+  const from=Math.max(40,S.length-15);
+  for(let i=S.length-1;i>=from;i--){
+    const actual=S[i];
+    const hits=[];
+    BT_STRATS.forEach(s=>{
+      const r=s.fn(S,i);
+      if(!r)return;
+      if(r.nums.includes(actual)) hits.push({name:s.name, size:r.nums.length});
+    });
+    hits.sort((a,b)=>a.size-b.size); // küçük bölge = daha değerli
+    h+=`<div class=al><span><b>El ${i+1}</b> <i class="ball sm ${col(actual)}">${actual}</i><br>
+    <span class="mu sm">${hits.length} strateji tuttu:</span><br>`;
+    if(hits.length){
+      h+=`<div class=chips style="margin-top:3px">${hits.slice(0,8).map(x=>`<span class="chip ${col(actual)}" title="${x.size} sayılık">${x.name.replace(/\s*\(.*\)/,'')}</span>`).join('')}${hits.length>8?`<span class="chip e">+${hits.length-8}</span>`:''}</div>`;
+    } else {
+      h+=`<span class="mu sm">hiçbiri tutmadı (nadir)</span>`;
+    }
+    h+=`</span></div>`;
+  }
+  h+=`</div>`;
+
+  // 7. Uyarı
+  h+=`<div class="mu sm" style="padding:4px 2px 12px">⚠️ Bu analiz geçmişe bakarak yapılıyor. Rulet bağımsız olaydır, geçmiş geleceği garanti etmez. Bahis başına beklenen kayıp ≈ %2.7.</div>`;
+
+  return h;
+}
+
+function btImport(rep){
+  const ta=document.getElementById('bt-ta');
+  if(!ta)return;
+  const m=(ta.value.match(/\d+/g)||[]).map(Number);
+  const v=m.filter(n=>n>=0&&n<=36);
+  if(!v.length){toast('Geçerli sayı yok');return}
+  if(rep&&S.length&&!confirm('Mevcut '+S.length+' sayının üzerine yazılsın mı?'))return;
+  S=rep?v:S.concat(v);save();
+  toast(v.length+' sayı yüklendi');draw();
+}
+
+function btExport(){
+  const t=S.join(',');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(t).then(()=>toast('Kopyalandı: '+S.length+' sayı'),()=>{
+      const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();
+      try{document.execCommand('copy');toast('Kopyalandı')}catch(e){toast('Kopyalanamadı')}
+      a.remove();
+    });
+  } else {
+    const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();
+    try{document.execCommand('copy');toast('Kopyalandı')}catch(e){toast('Kopyalanamadı')}
+    a.remove();
+  }
+}
+
+// ============================================================
+// ANA SAYFA - üstüne "şu an önerilen" ekle
+// ============================================================
 function home(){
  const L=S.length,X=L?S[L-1]:null,HI=hitInfo().hit;
  const st=Math.max(0,L-10),ev=[];
@@ -172,6 +683,22 @@ function home(){
  const ok=ev.filter(Boolean),hits=ok.filter(e=>e.hit).length,base=ok.length?ok.reduce((x,e)=>x+e.cov,0)/ok.length/37*100:0,hc=k=>ev[k]&&ev[k].hit?' hit':'';
  let h=`<div class=top><b>Rulet Takip</b><span class="mu sm">${L} el</span></div>`;
  h+=`<div class=card>${X===null?'<span class=mu>Henüz el yok. Aşağıdan sayıya dokun.</span>':`<div class=last><i class="ball ${col(X)}${hc(ev.length-1)}">${X}</i><div class=strip>${S.slice(-10).map((n,k)=>`<span class="chip ${col(n)}${hc(k)}">${n}</span>`).join('')}</div></div><div class=rt>${ok.length?`Tutan <b>${hits}/${ok.length}</b> · %${Math.round(hits/ok.length*100)} · rastgele ≈ %${Math.round(base)}`:'Doğrulama için en az 2 el gerekir'}</div>`}</div>`;
+
+ // YENİ: Backtest önerisi
+ if(L>=40){
+   const best=btBestNow(S);
+   if(best){
+     const strat=BT_STRATS.find(s=>s.name===best.name);
+     const r=strat.fn(S,S.length);
+     if(r){
+       h+=`<div class=card><h3>🎯 Backtest Önerisi</h3>
+       <div class="mu sm">Strateji: <b>${best.name}</b> · geçmişte %${(best.actual*100).toFixed(1)} tuttu (bekl. %${(best.exp*100).toFixed(1)}, z=${best.z.toFixed(2)})${r.group?' · '+r.group:''}${r.gap?' · '+r.gap+' eldir gelmiyor':''}</div>
+       <div class=chips style="margin-top:6px">${r.nums.map(n=>`<span class="chip ${col(n)}">${n}</span>`).join('')}</div>
+       </div>`;
+     }
+   }
+ }
+
  let c1;
  if(X===null)c1='<p class=mu>Sayı girince burada görünür.</p>';
  else{const t=top3(S,X,N);
@@ -183,6 +710,7 @@ function home(){
  h+=wide(X);
  h+=alerts();
  return h}
+
 function overlay(){
  const hs=new Set();for(let i=1;i<S.length;i++){const e=evalAt(i);if(e&&e.hit)hs.add(i)}
  const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
@@ -234,9 +762,18 @@ function t4(){
  const g=st==0?rng(0,11).map(k=>{const a=rng(3*k+1,3*k+3);return mk(a.join('-'),a)}):rng(0,10).map(k=>{const a=rng(3*k+1,3*k+6);return mk(a.join('-'),a)});
  return head('Çizgiler',seg)+sec('',g)}
 function draw(){
- document.getElementById('v').innerHTML=[home,tOB,t2,t3,t4][tab]();
+ document.getElementById('v').innerHTML=[home,tOB,t2,t3,t4,tOl,tPlus,tBacktest][tab]();
  const nv=document.getElementById('nav');
- nv.innerHTML=[['🎯','Ana Ekran'],['🔁','Önce/Sonra'],['📊','Dış Bahisler'],['🔢','Son Rakamlar'],['➖','Çizgiler']].map((x,i)=>`<button class="${tab==i?'on':''}" onclick="tab=${i};draw();scrollTo(0,0)"><i>${x[0]}</i>${x[1]}</button>`).join('');
+ nv.innerHTML=[
+   ['🎯','Ana'],
+   ['🔁','Önce/Sonra'],
+   ['📊','Dış Bahis'],
+   ['🔢','Son Rakam'],
+   ['➖','Çizgi'],
+   ['🧮','Olasılık'],
+   ['✨','Plus'],
+   ['🔬','Backtest']
+ ].map((x,i)=>`<button class="${tab==i?'on':''}" onclick="tab=${i};draw();scrollTo(0,0)"><i>${x[0]}</i>${x[1]}</button>`).join('');
  document.documentElement.style.setProperty('--nh',nv.offsetHeight+'px');
  document.getElementById('pw').innerHTML=panel();
  document.getElementById('ov').innerHTML=hist?overlay():''}
